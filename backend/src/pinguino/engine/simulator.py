@@ -50,12 +50,15 @@ class Trade(BaseModel):
     direction: Direction
     opened_at: datetime
     closed_at: datetime
+    volume: Decimal
     entry_price: Decimal
     exit_price: Decimal
     exit_reason: FillReason
     gross_pnl: Decimal
     commission: Decimal
     swap: Decimal
+    spread_cost: Decimal
+    slippage_cost: Decimal
     net_pnl: Decimal
     ambiguous: bool = False
 
@@ -87,6 +90,8 @@ class _Position:
     entry_signal_index: int
     opened_at: datetime
     commission: Decimal
+    spread_cost: Decimal
+    slippage_cost: Decimal
     swap: Decimal = Decimal(0)
     ambiguous: bool = False
     last_swap_charged: datetime | None = None
@@ -304,6 +309,8 @@ def _open_position(
         target = market.round_down(entry - reward)
 
     commission = market.costs.commission_per_lot_per_side * volume
+    entry_spread = market.spread(bar) * units if signal.direction is Direction.LONG else Decimal(0)
+    entry_slippage = market.slippage * units
     book.balance -= commission
     book.fills.append(
         Fill(
@@ -326,6 +333,8 @@ def _open_position(
         entry_signal_index=signal.bar_index,
         opened_at=bar.open_time,
         commission=commission,
+        spread_cost=market.to_account_currency(entry_spread, bar),
+        slippage_cost=market.to_account_currency(entry_slippage, bar),
         last_swap_charged=bar.open_time,
     )
 
@@ -455,6 +464,12 @@ def _close(
         if reason is FillReason.TAKE_PROFIT
         else market.costs.adverse_slippage_points * market.costs.slippage_multiplier
     )
+    exit_spread = (
+        market.spread(bar) * position.units if position.direction is Direction.SHORT else Decimal(0)
+    )
+    exit_slippage = slippage_points * market.point * position.units
+    spread_cost = position.spread_cost + market.to_account_currency(exit_spread, bar)
+    slippage_cost = position.slippage_cost + market.to_account_currency(exit_slippage, bar)
     exit_direction = Direction.SHORT if position.direction is Direction.LONG else Direction.LONG
     book.fills.append(
         Fill(
@@ -473,12 +488,15 @@ def _close(
             direction=position.direction,
             opened_at=position.opened_at,
             closed_at=bar.open_time,
+            volume=position.volume,
             entry_price=position.entry_price,
             exit_price=exit_price,
             exit_reason=reason,
             gross_pnl=_money(gross),
             commission=_money(position.commission + commission),
             swap=_money(position.swap),
+            spread_cost=_money(spread_cost),
+            slippage_cost=_money(slippage_cost),
             net_pnl=_money(net - position.commission),
             ambiguous=position.ambiguous,
         )
