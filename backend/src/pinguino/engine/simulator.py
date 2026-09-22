@@ -7,7 +7,7 @@ as an approximation of the intrabar path, never as tick-level evidence.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from decimal import ROUND_CEILING, ROUND_FLOOR, Decimal
@@ -24,6 +24,13 @@ from pinguino.domain.strategy import TIME_EXIT_SIGNAL_BARS, StrategyDefinition
 from pinguino.engine.signals import Signal, evaluate
 
 MONEY = Decimal("0.01")
+
+#: Cancellation is observed at least this often inside a trial.
+CANCELLATION_CHECK_M1_BARS = 1000
+
+
+class SimulationCancelled(Exception):
+    """Raised when a cooperative cancellation is observed mid-trial."""
 
 
 class RejectedSignal(BaseModel):
@@ -147,13 +154,15 @@ def simulate(
     window_start: datetime,
     window_end: datetime,
     signals: Sequence[Signal] | None = None,
+    should_cancel: Callable[[], bool] | None = None,
 ) -> SimulationResult:
     """Replay one candidate over ``[window_start, window_end)``.
 
     ``signal_bars`` must extend before ``window_start`` by the candidate's warm-up, and
     no warm-up bar produces a trade because only signals closing inside the window act.
     Passing ``signals`` replaces evaluation with an explicit list, which lets a fixture
-    pin entry timing and ATR to hand-calculated values.
+    pin entry timing and ATR to hand-calculated values. ``should_cancel`` is polled every
+    1 000 M1 bars and raises :class:`SimulationCancelled` when it answers true.
     """
     market = _Market(contract, costs)
     book = _Book(balance=sizing.initial_balance)
@@ -173,6 +182,12 @@ def simulate(
     pending_stop_out = False
 
     for bar_number, bar in enumerate(window_bars):
+        if (
+            should_cancel is not None
+            and bar_number % CANCELLATION_CHECK_M1_BARS == 0
+            and should_cancel()
+        ):
+            raise SimulationCancelled(f"cancelled at {bar.open_time.isoformat()}")
         is_last = bar_number == len(window_bars) - 1
 
         if position is not None:
