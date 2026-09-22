@@ -1,14 +1,14 @@
 ## item_001_settle_research_product_decisions_and_domain_contracts - Settle research product decisions and domain contracts
 > From version: 1.0.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In progress
 > Understanding: 90%
 > Confidence: 85%
-> Progress: 0%
+> Progress: 10%
 > Complexity: Medium
 > Theme: Product discovery
 > Reminder: Update status/understanding/confidence/progress and linked request/task references when you edit this doc.
-> Indicators reviewed: 2026-09-22 17:07:06
+> Indicators reviewed: 2026-09-22 17:11:43
 
 # AI Context
 - Summary: Implement the portable foundation, explicit schemas and versioned MVP defaults.

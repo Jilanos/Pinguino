@@ -1,14 +1,14 @@
 ## item_002_ingest_and_qualify_historical_forex_datasets - Ingest and qualify historical forex datasets
 > From version: 1.0.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In progress
 > Understanding: 90%
 > Confidence: 85%
-> Progress: 0%
+> Progress: 10%
 > Complexity: High
 > Theme: Market data
 > Reminder: Update status/understanding/confidence/progress and linked request/task references when you edit this doc.
-> Indicators reviewed: 2026-09-22 17:07:07
+> Indicators reviewed: 2026-09-22 17:11:43
 
 # AI Context
 - Summary: Qualify direct Windows MT5 history and broker metadata for three major pairs.

@@ -12,3 +12,19 @@ logics/.cache/*
 Thumbs.db
 *.swp
 *~
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# Local research data (immutable bar files, SQLite, exports)
+data/
+backend/data/

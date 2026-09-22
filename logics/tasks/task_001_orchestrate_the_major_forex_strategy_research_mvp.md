@@ -1,14 +1,15 @@
 ## task_001_orchestrate_the_major_forex_strategy_research_mvp - Orchestrate the major forex strategy research MVP
 > From version: 1.0.0
 > Schema version: 1.0
-> Status: Ready
+> Status: In progress
 > Understanding: 90%
 > Confidence: 85%
 > Progress: 0%
 > Complexity: Medium
 > Theme: Implementation delivery
 > Reminder: Update status/understanding/confidence/progress and linked request/backlog references when you edit this doc.
-> Indicators reviewed: 2026-09-22 17:07:56
+> Indicators reviewed: 2026-09-22 17:11:43
+> Owner: paul.mondou@circle-mobility.com
 
 # AI Context
 - Summary: Sequence six research slices with data correctness before search and no order submission.
