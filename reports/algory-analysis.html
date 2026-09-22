@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Analyse documentaire d’Algory : fonctionnement, MetaTrader 5, instruments, fonctionnalités, modèle économique et limites des preuves publiques.">
+  <meta name="color-scheme" content="light">
+  <title>Algory — Rapport d’analyse produit et technique</title>
+  <style>
+    :root { --ink:#172b35; --muted:#526773; --paper:#f3f5f2; --white:#fff; --line:#d8e1dd; --accent:#086b60; --soft:#e8f3ef; --amber:#805215; --amber-bg:#fff5df; --radius:16px; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:24px; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:16px/1.75 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--accent); text-underline-offset:3px; }
+    a:hover { text-decoration-thickness:2px; }
+    a:focus-visible,button:focus-visible { outline:3px solid #ce922c; outline-offset:5px; }
+    .skip { position:absolute; left:16px; top:-100px; padding:12px; background:white; z-index:5; }
+    .skip:focus { top:12px; }
+    .shell { max-width:1240px; margin:auto; padding:0 36px; }
+    .masthead { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:25px 0; border-bottom:1px solid var(--line); }
+    .brand { font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    button { font:inherit; font-size:13px; font-weight:650; border:1px solid var(--line); background:white; color:var(--ink); padding:9px 15px; border-radius:30px; cursor:pointer; }
+    button:hover { border-color:var(--accent); }
+    .hero { padding:65px 0 42px; max-width:940px; }
+    .eyebrow { color:var(--accent); font-size:12px; font-weight:800; letter-spacing:.17em; text-transform:uppercase; }
+    h1 { margin:17px 0 22px; font-size:clamp(42px,6vw,76px); line-height:1.05; letter-spacing:-.055em; font-weight:760; }
+    h1 span { color:var(--accent); }
+    .lead { font-size:21px; max-width:800px; line-height:1.6; }
+    .meta { display:flex; gap:10px; flex-wrap:wrap; margin-top:25px; }
+    .tag { font-size:12px; font-weight:600; border:1px solid var(--line); padding:5px 11px; border-radius:30px; background:#ffffff80; }
+    .facts { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:48px; }
+    .fact { border-top:3px solid var(--accent); background:white; padding:20px; border-radius:0 0 12px 12px; }
+    .fact small { display:block; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.09em; }
+    .fact strong { display:block; font-size:22px; margin:7px 0 2px; letter-spacing:-.025em; }
+    .fact p { color:var(--muted); font-size:13px; margin:0; }
+    .layout { display:grid; grid-template-columns:215px minmax(0,1fr); gap:48px; align-items:start; }
+    nav { position:sticky; top:25px; font-size:13px; padding-bottom:24px; }
+    nav p { font-size:11px; letter-spacing:.12em; text-transform:uppercase; font-weight:750; color:var(--muted); }
+    nav ol { list-style:none; padding:0; margin:0; counter-reset:toc; }
+    nav li { counter-increment:toc; border-bottom:1px solid var(--line); }
+    nav a { display:block; text-decoration:none; padding:10px 0; color:var(--muted); }
+    nav a::before { content:counter(toc,decimal-leading-zero) "  "; color:var(--accent); font-size:11px; font-weight:750; white-space:pre; }
+    nav a:hover { color:var(--accent); }
+    main { min-width:0; }
+    section { background:white; border:1px solid var(--line); border-radius:var(--radius); padding:32px; margin-bottom:24px; }
+    .section-label { font-size:11px; font-weight:800; color:var(--accent); letter-spacing:.12em; text-transform:uppercase; }
+    h2 { margin:8px 0 20px; font-size:28px; letter-spacing:-.035em; line-height:1.25; }
+    h3 { font-size:18px; line-height:1.4; margin:27px 0 9px; }
+    p { margin:12px 0; }
+    li { margin:6px 0; }
+    ul,ol { padding-left:23px; }
+    .note { padding:17px 19px; border-left:3px solid var(--accent); background:var(--soft); border-radius:0 9px 9px 0; margin:22px 0; font-size:14px; }
+    .warning { border-color:#c48a30; background:var(--amber-bg); color:var(--amber); }
+    .source { font-size:12px; color:var(--muted); margin-top:19px; }
+    .table-wrap { overflow-x:auto; margin:20px 0; }
+    table { width:100%; border-collapse:collapse; text-align:left; font-size:14px; }
+    caption { text-align:left; color:var(--muted); font-size:12px; padding-bottom:10px; }
+    th { background:var(--soft); font-size:11px; text-transform:uppercase; letter-spacing:.06em; }
+    th,td { padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th:first-child,td:first-child { padding-left:12px; }
+    code { background:var(--paper); font-size:.87em; padding:2px 5px; border-radius:4px; overflow-wrap:anywhere; }
+    .flow { list-style:none; counter-reset:step; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; padding:0; margin:24px 0; }
+    .flow li { counter-increment:step; margin:0; border:1px solid var(--line); border-radius:10px; padding:16px; font-size:13px; }
+    .flow li::before { content:counter(step,decimal-leading-zero); display:block; font-size:11px; font-weight:800; color:var(--accent); margin-bottom:8px; }
+    .flow strong { display:block; font-size:14px; }
+    .flow span { color:var(--muted); }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .card { border:1px solid var(--line); padding:19px; border-radius:10px; }
+    .card h3 { margin-top:0; }
+    .card p { font-size:14px; }
+    .verdict { background:var(--ink); color:white; border-color:var(--ink); }
+    .verdict .section-label { color:#80d4bb; }
+    .verdict p { color:#d8e5e8; }
+    .references { font-size:13px; }
+    .references li { margin:12px 0; }
+    .references small { display:block; color:var(--muted); }
+    footer { padding:28px 0 42px; color:var(--muted); font-size:12px; }
+    @media(max-width:950px) { .layout { grid-template-columns:1fr; gap:0; } nav { position:static; } nav ol { display:grid; grid-template-columns:1fr 1fr; column-gap:24px; } .facts { margin-bottom:24px; } }
+    @media(max-width:600px) { .shell { padding:0 18px; } .hero { padding-top:38px; } .lead { font-size:18px; } .facts { grid-template-columns:1fr 1fr; } .fact { padding:15px; } .fact strong { font-size:18px; } section { padding:23px 19px; } h2 { font-size:25px; } .flow { grid-template-columns:1fr 1fr; } .two-col { grid-template-columns:1fr; } th,td { padding:10px; } .brand { font-size:10px; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+    @media print {
+      @page { size:A4; margin:15mm; }
+      body { font-size:10pt; line-height:1.5; background:white; color:#18272d; }
+      .shell { max-width:none; padding:0; } .masthead { padding:0 0 12px; }
+      button,nav,.skip { display:none; } .layout { display:block; }
+      .hero { padding:25px 0 20px; } h1 { font-size:36pt; } .lead { font-size:13pt; }
+      .facts { gap:8px; margin-bottom:22px; } .fact { padding:12px; border:1px solid #ccc; }
+      .fact strong { font-size:14pt; } .fact small,.fact p { font-size:8pt; }
+      section { padding:18px 0; border:0; border-top:1px solid #ccc; border-radius:0; margin-bottom:10px; }
+      h2 { font-size:19pt; } h3 { font-size:12pt; } h2,h3 { break-after:avoid; }
+      tr,.note,.card,.flow li { break-inside:avoid; } table { font-size:9pt; }
+      .table-wrap { overflow:visible; } thead { display:table-header-group; }
+      .verdict { background:white; color:var(--ink); } .verdict p { color:var(--ink); }
+      a { color:#145b52; } .source,.references { font-size:8pt; }
+      .references a::after { content:" — " attr(href); font-size:7pt; overflow-wrap:anywhere; }
+      footer { padding-bottom:0; } .tag { font-size:8pt; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#contenu">Aller au rapport</a>
+  <div class="shell">
+    <header class="masthead">
+      <div class="brand">Pinguino / Recherche produit</div>
+      <button type="button" onclick="window.print()">Imprimer / Enregistrer en PDF</button>
+    </header>
+    <div class="hero">
+      <div class="eyebrow">Analyse documentaire · Produit &amp; technologie</div>
+      <h1>Algory.<br><span>De la stratégie au robot.</span></h1>
+      <p class="lead">Fonctionnement, plateformes, instruments, différenciation et limites : une lecture critique de l’outil à partir de ses ressources publiques.</p>
+      <div class="meta"><span class="tag">Analyse du 22 septembre 2026</span><span class="tag">Sources officielles et externes</span><span class="tag">Sans test du logiciel installé</span></div>
+    </div>
+    <div class="facts" aria-label="Repères essentiels">
+      <div class="fact"><small>Nature du produit</small><strong>Usine à stratégies</strong><p>Recherche, sélection et export de robots.</p></div>
+      <div class="fact"><small>Exécution documentée</small><strong>MetaTrader 5</strong><p>Ordres exécutés chez le courtier connecté.</p></div>
+      <div class="fact"><small>Environnement principal</small><strong>Windows</strong><p>Accès distant possible via un VPS.</p></div>
+      <div class="fact"><small>Niveau de preuve</small><strong>Documentaire</strong><p>Rentabilité réelle non établie par cette étude.</p></div>
+    </div>
+    <div class="layout">
+      <nav aria-label="Sommaire du rapport">
+        <p>Dans ce rapport</p>
+        <ol>
+          <li><a href="#perimetre">Périmètre et lecture</a></li>
+          <li><a href="#plateformes">Plateformes et marchés</a></li>
+          <li><a href="#fonctionnement">Fonctionnement</a></li>
+          <li><a href="#interface">Interface et données</a></li>
+          <li><a href="#evolutions">Évolutions récentes</a></li>
+          <li><a href="#risque">Portefeuille et risque</a></li>
+          <li><a href="#validation">Validation et parité</a></li>
+          <li><a href="#innovation">Différenciation</a></li>
+          <li><a href="#economie">Installation et économie</a></li>
+          <li><a href="#conclusion">Évaluation et inconnues</a></li>
+          <li><a href="#sources">Sources</a></li>
+        </ol>
+      </nav>
+      <main id="contenu">
+        <section id="perimetre">
+          <div class="section-label">01 / Cadre de l’étude</div>
+          <h2>Une chaîne de production de robots</h2>
+          <p>Algory génère et sélectionne des stratégies ; les robots exportés exécutent ensuite leurs ordres dans MetaTrader 5. Démarrer une campagne de recherche ne déclenche pas une prise de position.</p>
+          <p>Le présent rapport repose sur la vitrine, son JavaScript, les guides, les notes de version, les offres commerciales et des ressources externes. Aucun compte client ni logiciel installé n’a été testé.</p>
+          <div class="note"><strong>Comment lire les résultats.</strong> « Documenté » signifie décrit par une source, pas vérifié en fonctionnement. Les observations du code de la vitrine et les appréciations de l’analyse sont distinguées des promesses de l’éditeur.</div>
+          <p class="source">Source : <a href="https://algory.app/g/algory-how-to-use.html">procédure officielle</a>.</p>
+        </section>
+        <section id="plateformes">
+          <div class="section-label">02 / Connectivité</div>
+          <h2>MT5 fait le lien avec le courtier</h2>
+          <p>MetaTrader 5 fournit les données de marché et héberge les Expert Advisors (EA). Le terminal doit être connecté au courtier et autoriser le trading algorithmique. Algory peut être fermé pour la seule exécution des robots ; MT5 doit rester ouvert.</p>
+          <div class="table-wrap"><table>
+            <caption>Compatibilité établie par les documents consultés</caption>
+            <thead><tr><th scope="col">Élément</th><th scope="col">Constat</th></tr></thead>
+            <tbody>
+              <tr><td>Exécution</td><td>MetaTrader 5, via des Expert Advisors.</td></tr>
+              <tr><td>Courtier</td><td>Celui du compte connecté au terminal ; aucune liste publique exhaustive vérifiée.</td></tr>
+              <tr><td>Comptes</td><td>Démonstration, réel et comptes financés sont envisagés dans les guides.</td></tr>
+              <tr><td>MT4, cTrader, TradingView</td><td>Aucune intégration identifiée dans les ressources consultées.</td></tr>
+              <tr><td>Binance, Bybit, Kraken, Coinbase</td><td>Aucun connecteur direct identifié.</td></tr>
+            </tbody>
+          </table></div>
+          <p class="source">Source : <a href="https://algory.app/g/algory-mt5-basics.html">guide MT5</a>. L’absence d’intégration identifiée ne démontre pas une impossibilité technique.</p>
+          <h3>Instruments repérés</h3>
+          <div class="table-wrap"><table>
+            <thead><tr><th scope="col">Famille</th><th scope="col">Symboles</th><th scope="col">Preuve</th></tr></thead>
+            <tbody>
+              <tr><td>Forex</td><td>EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD, EURGBP, GBPJPY</td><td>Démonstration JavaScript.</td></tr>
+              <tr><td>Métaux</td><td>XAUUSD</td><td>Démonstration JavaScript.</td></tr>
+              <tr><td>Indices</td><td>US30, NAS100</td><td>Démonstration JavaScript.</td></tr>
+              <tr><td>Autres indices</td><td>DE40, JP225</td><td>Corrections documentées du logiciel.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Ces exemples ne constituent ni un catalogue exhaustif ni une certification de compatibilité. Les symboles et contrats dépendent du courtier.</p>
+          <p class="source">Sources : <a href="https://algory.app/index.html">vitrine et code public</a> ; <a href="https://algory.app/g/new-ui.html">notes Boadicea</a>.</p>
+        </section>
+        <section id="fonctionnement">
+          <div class="section-label">03 / Parcours utilisateur</div>
+          <h2>De la campagne au compte de trading</h2>
+          <ol class="flow" aria-label="Les six étapes du parcours">
+            <li><strong>Configurer</strong><span>Marchés, horizons, capital et paramètres de risque.</span></li>
+            <li><strong>Générer</strong><span>Exploration génétique de variantes de stratégies.</span></li>
+            <li><strong>Sélectionner</strong><span>Évaluation et validation hors entraînement.</span></li>
+            <li><strong>Assembler</strong><span>Inspection du Vault et constitution du portefeuille.</span></li>
+            <li><strong>Vérifier</strong><span>Compilation MT5, parité et compte de démonstration.</span></li>
+            <li><strong>Exécuter</strong><span>Robots actifs chez le courtier, suivi et remplacement.</span></li>
+          </ol>
+          <p>Le <em>Vault</em> est la bibliothèque des stratégies conservées. L’utilisateur y examine les résultats et la composition avant d’ajouter les robots au portefeuille. La compilation dépose les EA dans le répertoire de MetaTrader.</p>
+          <p class="source">Source : <a href="https://algory.app/g/algory-how-to-use.html">guide de fonctionnement</a>.</p>
+          <h3>Les règles illustrées</h3>
+          <p>Le code de démonstration illustre des signaux stochastiques, CCI, MACD, Williams %R et RSI ; des biais de tendance et de session ; des filtres ATR et de spread ; un stop suiveur et un passage au point mort. Ce n’est pas le catalogue vérifié du moteur installé.</p>
+          <p class="source">Source : <a href="https://algory.app/index.html">JavaScript de la vitrine</a>.</p>
+          <div class="note"><strong>Interprétation technique.</strong> La recherche génétique explore des combinaisons de règles et de paramètres. Les termes visuels « Neural Core » ou « DNA » ne prouvent pas l’utilisation d’un réseau neuronal prédictif.</div>
+        </section>
+        <section id="interface">
+          <div class="section-label">04 / Surface produit</div>
+          <h2>Un poste de recherche et de pilotage</h2>
+          <div class="table-wrap"><table>
+            <thead><tr><th scope="col">Espace</th><th scope="col">Usage décrit</th></tr></thead>
+            <tbody>
+              <tr><td>Command Deck</td><td>Vue générale des campagnes et résultats.</td></tr>
+              <tr><td>Campaign</td><td>Générations, courbes et transactions simulées.</td></tr>
+              <tr><td>Vault</td><td>Bibliothèque et inspection des stratégies.</td></tr>
+              <tr><td>Portfolios</td><td>Composition, exposition et corrélations.</td></tr>
+              <tr><td>Map</td><td>Regroupement visuel des stratégies par type.</td></tr>
+              <tr><td>Insights</td><td>Analyse des marchés et familles de stratégies.</td></tr>
+              <tr><td>Control</td><td>Configuration et orchestration des recherches.</td></tr>
+            </tbody>
+          </table></div>
+          <p>Boadicea décrit des campagnes en file, répétables, suspendables et reprenables. L’accélération GPU concerne l’interface ; elle ne prouve pas que le moteur de recherche calcule sur GPU.</p>
+          <p>L’éditeur décrit un historique téléchargé auprès du courtier, une mesure du spread bid/ask et une résolution des exécutions sur des bougies d’une minute. Les règles de volume des indices font aussi l’objet de corrections.</p>
+          <p class="source">Source : <a href="https://algory.app/g/new-ui.html">documentation Boadicea</a>. Description historique à croiser avec les évolutions suivantes.</p>
+        </section>
+        <section id="evolutions">
+          <div class="section-label">05 / État annoncé</div>
+          <h2>Ce que les notes récentes changent</h2>
+          <p>La page <code>1.5.1.2.1</code>, datée du 7 septembre 2026, annonce :</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th scope="col">Sujet</th><th scope="col">Évolution</th></tr></thead>
+            <tbody>
+              <tr><td>Horizons</td><td>M5/D1 retirés de l’entraînement ; M15/M30/H1/H2/H4 mentionnés.</td></tr>
+              <tr><td>Contexte</td><td>H1 optionnel pour M15/M30.</td></tr>
+              <tr><td>Réentraînement</td><td>Retiré ; réévaluation puis remplacement.</td></tr>
+              <tr><td>Recherche</td><td>Optimisation renforcée : entrée, stop, objectif.</td></tr>
+              <tr><td>TRUE SIM</td><td>Simulation commune du portefeuille avec contraintes de risque.</td></tr>
+              <tr><td>Incubation</td><td>Risque progressif : quart, moitié, totalité, selon résultats.</td></tr>
+              <tr><td>Surveillance</td><td>Dégradation détectée ; progression potentiellement bloquée.</td></tr>
+              <tr><td>Score</td><td>GOOD dès 55, selon l’éditeur.</td></tr>
+              <tr><td>Diversité</td><td>Cinq dimensions, contre sept dans l’ancien guide.</td></tr>
+              <tr><td>Historique</td><td>Données intégrées pouvant compléter celles du courtier.</td></tr>
+              <tr><td>Partenaires</td><td>Courtiers et prop firms présentés dans l’application.</td></tr>
+              <tr><td>Confidentialité</td><td>Résumés de stratégies partagés par défaut ; désactivation possible.</td></tr>
+              <tr><td>Linux</td><td>Exécution via Wine mentionnée.</td></tr>
+              <tr><td>Pro</td><td>Déploiement, parité et réévaluation notamment payants.</td></tr>
+            </tbody>
+          </table></div>
+          <div class="note warning">La page conserve des descriptions incompatibles de REFRESH et des références résiduelles au réentraînement. La documentation n’est pas une spécification parfaitement fiable de l’application installée.</div>
+          <p class="source">Source : <a href="https://algory.app/g/patch-notes-latest.html">notes de version</a>. Cette URL évolutive peut changer après la date de l’analyse.</p>
+        </section>
+        <section id="risque">
+          <div class="section-label">06 / Gestion collective</div>
+          <h2>Le portefeuille compte plus que le robot isolé</h2>
+          <p>Le guide privilégie plusieurs stratégies spécialisées et recommande 20 à 40 robots. Il s’agit d’une préconisation de l’éditeur, pas d’une preuve que ce nombre garantit une diversification.</p>
+          <ul>
+            <li><strong>Symbol Lock :</strong> une seule stratégie peut détenir une position par symbole.</li>
+            <li><strong>Max Agg Risk :</strong> plafond du risque cumulé des positions ouvertes.</li>
+            <li><strong>Account heat :</strong> perte théorique cumulée si toutes les positions atteignent leur stop.</li>
+            <li><strong>Diversification :</strong> marchés, horizons, mécanismes, sessions et directions.</li>
+          </ul>
+          <div class="note"><strong>Exemple pédagogique.</strong> Vingt robots risquant chacun 0,5 % peuvent cumuler 10 % si tous sont engagés simultanément. Ce calcul au stop ne garantit pas la perte maximale effectivement subie.</div>
+          <p>La question d’évaluation est la contribution réelle de chaque robot : des indicateurs ou des paires différents peuvent masquer une même exposition économique.</p>
+          <p class="source">Source : <a href="https://algory.app/g/algory-portfolio-risk.html">guide portefeuille et risque</a>. Les paramètres cités ne sont pas des recommandations de placement.</p>
+        </section>
+        <section id="validation">
+          <div class="section-label">07 / Qualité des preuves</div>
+          <h2>Parité de simulation ≠ garantie du réel</h2>
+          <p>Le test officiel demande de reproduire le symbole, l’horizon, la période, le capital et le levier dans MT5, en mode <strong>OHLC une minute</strong>. Algory indique ne pas simuler les ticks et déconseille les ticks réels pour cette comparaison, parce que le modèle serait différent.</p>
+          <p>Ce test évalue d’abord la cohérence entre moteur de recherche et robot exporté. Deux simulations peuvent partager les mêmes approximations.</p>
+          <p class="source">Source : <a href="https://algory.app/g/algory-parity-test.html">guide de parité</a>.</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th scope="col">Vérification</th><th scope="col">Ce qu’elle évalue</th></tr></thead>
+            <tbody>
+              <tr><td>Hors entraînement</td><td>Comportement sur un historique non utilisé pour ajuster les paramètres.</td></tr>
+              <tr><td>Parité Algory–MT5</td><td>Cohérence entre deux implémentations dans des conditions comparables.</td></tr>
+              <tr><td>Conditions réelles</td><td>Comportement face aux cotations et exécutions effectivement rencontrées.</td></tr>
+            </tbody>
+          </table></div>
+          <p>MetaQuotes décrit le mode OHLC minute comme plus rapide mais moins réaliste que les modes plus détaillés. Certains mécanismes d’exécution changent selon le mode de test.</p>
+          <p class="source">Sources : <a href="https://www.metatrader5.com/en/terminal/help/algotrading/test_preparation">données du testeur MT5</a> ; <a href="https://www.metatrader5.com/en/terminal/help/algotrading/testing_features">particularités d’exécution</a>.</p>
+          <h3>La sélection massive reste un problème statistique</h3>
+          <p>Tester de nombreuses variantes augmente la possibilité de retenir une bonne performance due au hasard. Une période hors entraînement ne suffit pas automatiquement, notamment lorsqu’elle intervient répétitivement dans la sélection. Aucun protocole public suffisamment détaillé n’a été trouvé pour quantifier ce risque chez Algory.</p>
+          <p class="source">Contexte scientifique : <a href="https://escholarship.org/uc/item/4w1110bb">The Probability of Backtest Overfitting, Bailey et coauteurs</a>.</p>
+          <div class="note warning"><strong>Observation directe de la vitrine.</strong> Son JavaScript génère des transactions et des courbes synthétiques avec des valeurs aléatoires. Les rendements affichés ne prouvent pas un historique réel. Cela ne permet pas de conclure que les résultats du logiciel installé sont fictifs.</div>
+          <p class="source">Source inspectée : <a href="https://algory.app/index.html">code public de la page d’accueil</a>.</p>
+        </section>
+        <section id="innovation">
+          <div class="section-label">08 / Positionnement</div>
+          <h2>La différenciation est surtout dans l’intégration</h2>
+          <p>Génération génétique, validation de robustesse et portefeuilles décorrélés existent déjà dans cette catégorie. StrategyQuant documente notamment l’export de code, les simulations Monte-Carlo et les validations walk-forward. Algory ne peut donc pas être présenté comme l’inventeur de ces principes.</p>
+          <p class="source">Comparaison de fonctionnalités déclarées : <a href="https://www.strategyquant.com/">StrategyQuant</a>. Aucun benchmark comparatif n’a été réalisé.</p>
+          <div class="two-col">
+            <div class="card"><h3>Valeur à mesurer</h3><p>Temps jusqu’au premier robot vérifié ; traçabilité des données ; explication des rejets ; comportement collectif ; facilité de retrait d’une stratégie.</p></div>
+            <div class="card"><h3>Preuves à exiger</h3><p>Reproductibilité ; historique indépendant ; coûts réalistes ; validation statistique ; stabilité de l’exécution et du suivi.</p></div>
+          </div>
+          <p>Appréciation de l’analyse : la continuité du parcours utilisateur peut constituer un avantage utile. La sophistication visuelle, en revanche, ne mesure ni la robustesse ni la rentabilité.</p>
+        </section>
+        <section id="economie">
+          <div class="section-label">09 / Exploitation et revenus</div>
+          <h2>Application locale, abonnement et distribution</h2>
+          <p>Le parcours principal est Windows. Pour Mac, Android, iPhone ou tablette, le guide propose un VPS Windows accessible à distance : le serveur exécute Algory et MT5, l’appareil sert d’écran. Il faut pouvoir installer les logiciels avec les droits nécessaires.</p>
+          <p>Le guide estime le VPS à 15–40 dollars par mois. C’est une estimation de l’éditeur, pas un devis vérifié.</p>
+          <p class="source">Source : <a href="https://algory.app/g/algory-mac-android.html">guide d’accès distant</a>.</p>
+          <div class="table-wrap"><table>
+            <caption>Tarifs publiés dans le programme partenaires, non vérifiés au paiement</caption>
+            <thead><tr><th scope="col">Facturation</th><th scope="col">Montant affiché</th></tr></thead>
+            <tbody><tr><td>Mensuelle</td><td>97 $</td></tr><tr><td>Trimestrielle</td><td>197 $</td></tr><tr><td>Annuelle</td><td>487 $</td></tr></tbody>
+          </table></div>
+          <p>L’affiliation prévoit 50 % des paiements pendant douze mois, puis 20 %, avec une réduction initiale pour le client. Une recommandation commerciale peut donc être rémunérée. Taxes et montant final n’ont pas été vérifiés.</p>
+          <p class="source">Source : <a href="https://algory.app/partners.html">programme partenaires</a>.</p>
+          <p>La marque blanche ajoute un autre canal : commercialisation sous une identité distincte, frais de mise en place et partage de revenus négociés. L’éditeur conserve le moteur et gère la technique et les licences. Ce n’est pas une remise du code source.</p>
+          <p class="source">Source : <a href="https://algory.app/whitelabel.html">offre whitelabel</a>.</p>
+          <h3>L’entreprise derrière le produit</h3>
+          <p>Companies House confirme VAGAFX LTD, numéro 14261308, créée le 28 juillet 2022, et Tomas Edgar Rees comme dirigeant. Cette identité juridique n’établit pas la performance du logiciel.</p>
+          <p>Les avis VagaFX trouvés portent notamment sur des formations et indicateurs antérieurs : ils ne valident pas directement Algory.</p>
+          <p class="source">Sources : <a href="https://find-and-update.company-information.service.gov.uk/company/14261308">registre britannique</a> ; <a href="https://find-and-update.company-information.service.gov.uk/officers/6zrnD3rWbWOo6rRypVJd31ML9Dw/appointments">dirigeant</a> ; <a href="https://uk.trustpilot.com/review/vagafx.com">avis VagaFX</a>.</p>
+        </section>
+        <section id="conclusion" class="verdict">
+          <div class="section-label">10 / Appréciation</div>
+          <h2>Un concept cohérent, des résultats à démontrer</h2>
+          <p>L’intérêt produit est la chaîne complète : recherche, validation, déploiement et maintenance. La rentabilité, la robustesse statistique et la fidélité au réel restent des résultats à mesurer sur une installation contrôlée.</p>
+          <h3>Informations non établies publiquement</h3>
+          <ul>
+            <li>Catalogue exhaustif des courtiers et instruments testés.</li>
+            <li>Formule complète du score et critères de sélection.</li>
+            <li>Bibliothèque actuelle des règles génétiques.</li>
+            <li>Provenance et droits des historiques intégrés.</li>
+            <li>Historique réel indépendant, vérifié et suffisamment long.</li>
+            <li>Accès au source des EA et droits après résiliation.</li>
+            <li>Comportement exact des fonctions documentées de façon contradictoire.</li>
+          </ul>
+        </section>
+        <section id="sources">
+          <div class="section-label">11 / Références</div>
+          <h2>Sources de l’analyse</h2>
+          <p>Pages consultées pour l’analyse du 22 septembre 2026. Les liens mènent aux ressources vivantes ; aucune archive immuable de leur contenu n’est incluse.</p>
+          <ol class="references">
+            <li><a href="https://algory.app/index.html">Algory — Vitrine et JavaScript public</a><small>Présentation, démonstration et exemples de symboles.</small></li>
+            <li><a href="https://algory.app/g/algory-how-to-use.html">How to use Algory</a><small>Parcours campagne, bibliothèque, portefeuille et déploiement.</small></li>
+            <li><a href="https://algory.app/g/algory-mt5-basics.html">MetaTrader 5 basics</a><small>Connexion au courtier et fonctionnement des EA.</small></li>
+            <li><a href="https://algory.app/g/algory-parity-test.html">Prove backtest-to-live parity</a><small>Protocole de comparaison des simulations.</small></li>
+            <li><a href="https://algory.app/g/algory-portfolio-risk.html">Portfolio &amp; risk</a><small>Diversification et risque cumulé.</small></li>
+            <li><a href="https://algory.app/g/algory-mac-android.html">Algory on Mac or Android</a><small>Déploiement sur un VPS Windows.</small></li>
+            <li><a href="https://algory.app/g/new-ui.html">The Boadicea Upgrade</a><small>Interface et fonctionnement documenté en juillet 2026.</small></li>
+            <li><a href="https://algory.app/g/patch-notes-latest.html">Dernières notes de version</a><small>Évolutions et corrections ; page susceptible de changer.</small></li>
+            <li><a href="https://algory.app/partners.html">Programme partenaires</a><small>Tarifs indicatifs et affiliation.</small></li>
+            <li><a href="https://algory.app/whitelabel.html">Offre whitelabel</a><small>Distribution en marque blanche.</small></li>
+            <li><a href="https://www.metatrader5.com/en/terminal/help/algotrading/test_preparation">MetaQuotes — Préparation des tests</a><small>Données historiques et modes de simulation.</small></li>
+            <li><a href="https://www.metatrader5.com/en/terminal/help/algotrading/testing_features">MetaQuotes — Particularités des tests</a><small>Différences de simulation et d’exécution.</small></li>
+            <li><a href="https://www.strategyquant.com/">StrategyQuant</a><small>Comparaison des fonctionnalités déclarées.</small></li>
+            <li><a href="https://escholarship.org/uc/item/4w1110bb">The Probability of Backtest Overfitting</a><small>Bailey et coauteurs — contexte scientifique.</small></li>
+            <li><a href="https://find-and-update.company-information.service.gov.uk/company/14261308">Companies House — VAGAFX LTD</a><small>Identité juridique.</small></li>
+            <li><a href="https://find-and-update.company-information.service.gov.uk/officers/6zrnD3rWbWOo6rRypVJd31ML9Dw/appointments">Companies House — Tomas Edgar Rees</a><small>Mandat de direction.</small></li>
+            <li><a href="https://uk.trustpilot.com/review/vagafx.com">Trustpilot — VagaFX</a><small>Avis sur des offres antérieures, non assimilables à une validation d’Algory.</small></li>
+          </ol>
+        </section>
+      </main>
+    </div>
+    <footer>Rapport indépendant préparé pour Pinguino · 22 septembre 2026 · Analyse documentaire, sans affiliation avec Algory.<br>Document HTML autonome : aucun script, police ou service externe chargé à l’ouverture. Les sources s’ouvrent uniquement sur clic.</footer>
+  </div>
+</body>
+</html>

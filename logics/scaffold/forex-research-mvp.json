@@ -1,0 +1,246 @@
+{
+  "title": "Establish a reproducible major forex strategy research MVP",
+  "references": [
+    "README.md",
+    "logics/discovery/forex-research-mvp.md",
+    "logics/discovery/mvp-development-contract.md"
+  ],
+  "request": {
+    "complexity": "High",
+    "theme": "Strategy research",
+    "needs": [
+      "Generate, backtest and refine diverse major-forex strategies with traceable evidence.",
+      "Keep MT5 as the target market-data/execution ecosystem while limiting V1 to historical research.",
+      "Separate confirmed scope from product decisions awaiting user feedback."
+    ],
+    "context": [
+      "The repository currently contains a Git/Logics bootstrap and an untracked HTML research report; there is no application, dependency manifest or test suite.",
+      "Confirmed: major forex, intended MT5 ecosystem, generation and backtesting first; no order submission or deployment.",
+      "User confirmed D1-D4: local French browser UI, Windows-only application runtime with direct read-only MT5 ingestion, explainable trend/mean-reversion/breakout families with bounded parameters, EURUSD/GBPUSD/USDJPY on H1/H4 with a five-year history target where available. D6 is confirmed: prioritize robustness across periods and controlled equity drawdown, then net return. D10 and D11 are confirmed: H1/H4 signals, simulated M1 execution with conservative ambiguity handling, and individual-strategy evaluation/comparison with shared-account portfolios deferred. D5 and operator values for D7/D9 remain unknown; engineering defaults for budgets, validation, sizing and fills are defined in the development contract in logics/discovery/forex-research-mvp.md.",
+      "Broker identities are anonymized; credentials and licensed market histories must never enter the public repository.",
+      "The user requested a ready-to-develop MVP corpus. Engineering defaults now unblock portable implementation; Windows/MT5 setup remains an integration-delivery dependency. No execution or deployment feature is included.",
+      "User confirmed that nothing is set up yet: Windows/MT5 integration prerequisites and demo data access must be established; CPU/RAM, campaign duration, simulation currency and balance are unspecified.",
+      "Implementation baseline: `logics/discovery/mvp-development-contract.md`; demo defaults are not broker settings."
+    ],
+    "acceptance_criteria": [
+      "AC1: A versioned product decision record distinguishes confirmed scope, provisional defaults and unresolved implementation choices; V1 has no order-submission or deployment capability.",
+      "AC2: Historical datasets have immutable identity, source provenance, coverage, timezone/session metadata, broker contract and cost assumptions, plus an explicit quality report; invalid or insufficient data cannot silently pass.",
+      "AC3: A deterministic causal reference backtest records orders, fills, trades, open-position equity and costs using a documented execution and sizing contract; future data cannot affect earlier decisions.",
+      "AC4: Bounded strategy generation records family, parameters, seed, planned trials and completed/failed/cancelled attempts, and can reproduce an individual result.",
+      "AC5: Chronological validation, a controlled final holdout, cost/parameter stress and inconclusive-sample verdicts produce explainable candidate assessments without using final evaluation to refine candidates.",
+      "AC6: A single user can create a campaign, inspect data quality, compare candidates, drill into trades and export a reproducible report through the agreed interface.",
+      "AC7: End-to-end evidence reproduces results from a versioned fixture, confirms that research cannot submit orders, and documents data, model and throughput limitations."
+    ]
+  },
+  "product": {
+    "title": "Pinguino major forex strategy research workbench",
+    "overview": "A local French browser workbench running on Windows, reading MT5 history directly, to generate and backtest explainable trend, mean-reversion and breakout strategies on EURUSD/GBPUSD/USDJPY H1/H4. Target five years where available. Historical research only. Prioritize robustness across periods and controlled equity drawdown, then net return; thresholds and ranking mechanics use configurable engineering defaults in the development contract. Confirmed simulation: H1/H4 signals, M1 execution with conservative ambiguity handling, and individual-strategy evaluation/comparison.",
+    "goals": [
+      "Make research reproducible from versioned market data to candidate report.",
+      "Reject misleading results caused by look-ahead, missing costs, poor data or repeated holdout selection.",
+      "Expose candidate trade-offs rather than promise profitable robots.",
+      "Keep future execution adapters separate from the first historical-research delivery."
+    ],
+    "non_goals": [
+      "Live or demo trading, EA deployment and broker account changes.",
+      "Crypto, multi-user hosting, billing and public performance claims.",
+      "Unrestricted genetic search and concurrent portfolio replay in V1."
+    ]
+  },
+  "backlog_items": [
+    {
+      "title": "Settle research product decisions and domain contracts",
+      "priority": "High",
+      "complexity": "Medium",
+      "theme": "Product discovery",
+      "request_acs": [
+        "AC1"
+      ],
+      "problem": [
+        "There is no runnable application or domain schema. The foundation must turn the recorded contract into testable code without assuming an available MT5 installation."
+      ],
+      "scope_in": [
+        "Implement the foundation described in logics/discovery/mvp-development-contract.md: Python/FastAPI backend, React/TypeScript UI shell, dependency locks and a documented local launch command.",
+        "Implement validated schemas for datasets, strategies, policies, campaigns and results, with canonical identifiers and synthetic fixture configuration.",
+        "Initialize the French i18n contract before adding UI copy; expose unavailable-MT5 diagnostics without preventing synthetic mode.",
+        "Preserve confirmed user choices separately from configurable engineering defaults and unknown operator inputs."
+      ],
+      "scope_out": [
+        "Broker selection, real account settings, backtest engine and live execution."
+      ],
+      "acceptance_criteria": [
+        "AC1: The decision register records user choices with rationale and explicitly leaves unanswered choices provisional.",
+        "AC2: Validated schemas and fixtures encode the development contract, reject missing required inputs and distinguish synthetic defaults from broker metadata.",
+        "AC3: Data flow explicitly excludes order requests, credentials in source control and terminal mutations.",
+        "AC4: A clean environment installs locked dependencies and starts the local API/UI shell in synthetic mode without the MT5 package.",
+        "AC5: Schema tests cover invalid policies, stable content identifiers and no credentials in exported configuration; French UI source-language validation passes."
+      ]
+    },
+    {
+      "title": "Ingest and qualify historical forex datasets",
+      "priority": "High",
+      "complexity": "High",
+      "theme": "Market data",
+      "request_acs": [
+        "AC2"
+      ],
+      "problem": [
+        "Backtests cannot be trusted without provenance and consistent tradable history."
+      ],
+      "scope_in": [
+        "High priority; depends on approved data contracts from the discovery slice.",
+        "Implement direct read-only MT5 historical ingestion on Windows behind a source adapter; qualify EURUSD/GBPUSD/USDJPY H1/H4 with a five-year coverage target where available.",
+        "Normalize UTC timestamps, sessions and symbol contracts; report gaps, duplicates, spread/cost coverage and usable windows.",
+        "Keep licensed history local and use distributable synthetic fixtures in the repository.",
+        "Qualify M1 execution history in addition to H1/H4 signal data; missing M1 coverage must block the confirmed simulation mode rather than silently falling back to H1/H4 execution.",
+        "Document and verify Windows/MT5 setup prerequisites before integration testing. Use synthetic fixtures for portable checks, and report real-terminal validation as pending until the environment exists.",
+        "Source contract and quality cases are specified in sections Data and MT5 adapter of logics/discovery/mvp-development-contract.md. Prerequisite: foundation schemas. Preserve MT5 UTC timestamps without double conversion."
+      ],
+      "scope_out": [
+        "Live feeds, orders, automatic substitution of another broker's data."
+      ],
+      "acceptance_criteria": [
+        "AC1: Importing a fixture yields a stable dataset fingerprint and complete provenance/coverage report.",
+        "AC2: Fixtures with bad ordering, duplicates, invalid OHLC or unknown timezone are rejected or quarantined with reasons.",
+        "AC3: Missing execution/cost history and insufficient requested coverage cannot be represented as a fully qualified dataset.",
+        "AC4: Contract metadata includes account-currency conversion inputs, volume constraints and trading sessions.",
+        "AC5: Dataset qualification reports aligned H1/H4 signal and M1 execution coverage; missing M1 data cannot silently fall back to coarser execution."
+      ]
+    },
+    {
+      "title": "Implement a deterministic causal backtest reference engine",
+      "priority": "High",
+      "complexity": "High",
+      "theme": "Simulation correctness",
+      "request_acs": [
+        "AC3"
+      ],
+      "problem": [
+        "A fast search amplifies incorrect fills and look-ahead before users can detect them."
+      ],
+      "scope_in": [
+        "High priority; requires qualified data and agreed order/sizing contracts.",
+        "Build a simple reference engine with explicit closed-bar signal timing, fills, costs and open-position equity.",
+        "Declare policies for same-bar stop/target ambiguity, gaps, swaps, slippage, lot rounding and margin.",
+        "Use one versioned strategy representation; no execution connector.",
+        "Use closed H1/H4 bars for signals and M1 bars for simulated execution, with explicit conservative ambiguity rules. Evaluate each strategy on an isolated simulated account; shared-account portfolio replay is deferred.",
+        "Execution, sizing, spread, gap, margin, rollover, conversion and rounding policies are specified in logics/discovery/mvp-development-contract.md. Prerequisites: foundation and qualified synthetic M1/H1/H4 fixtures."
+      ],
+      "scope_out": [
+        "Performance optimization ahead of correctness, tick scalping, portfolio-wide shared margin."
+      ],
+      "acceptance_criteria": [
+        "AC1: Hand-calculated fixtures verify entry timing, spread/commission, stops/targets, gap handling and account-currency PnL.",
+        "AC2: Changing future bars leaves earlier decisions and fills unchanged.",
+        "AC3: Replaying identical inputs yields identical trades and metrics within a documented numerical tolerance.",
+        "AC4: Equity drawdown includes unrealized PnL; approximations and insufficient inputs are visible.",
+        "AC5: Fixtures demonstrate closed H1/H4 signal timing with M1 execution and documented conservative treatment of ambiguous bars; reports identify M1 simulation as an approximation rather than tick-level evidence."
+      ]
+    },
+    {
+      "title": "Generate bounded strategies and track research campaigns",
+      "priority": "High",
+      "complexity": "High",
+      "theme": "Strategy generation",
+      "request_acs": [
+        "AC4"
+      ],
+      "problem": [
+        "Search needs explicit boundaries and full attempt history to avoid irreproducible selection."
+      ],
+      "scope_in": [
+        "High priority; depends on a verified reference engine and confirmed generation policy.",
+        "Confirmed starting families: trend, mean reversion and breakout with bounded parameters.",
+        "Preview search size and compute budget; persist configuration, seed, all trials and failures.",
+        "Cancel a run without losing completed evidence; export a portable candidate definition.",
+        "Implement the exact three-family grid, 192 base candidates, all-evaluation budget and persisted cancellation/restart semantics in logics/discovery/mvp-development-contract.md. Prerequisite: verified reference engine."
+      ],
+      "scope_out": [
+        "Arbitrary generated code, unbounded genetic evolution and automatic deployment."
+      ],
+      "acceptance_criteria": [
+        "AC1: A campaign records family/parameter bounds, seed, budget and planned trial count before running.",
+        "AC2: Every attempt has an outcome and provenance; rejected or failed attempts remain visible.",
+        "AC3: Cancellation stops scheduling new work and preserves completed results.",
+        "AC4: A selected trial can be rerun independently from saved inputs."
+      ]
+    },
+    {
+      "title": "Evaluate chronological robustness and protect the final holdout",
+      "priority": "High",
+      "complexity": "High",
+      "theme": "Research validity",
+      "request_acs": [
+        "AC5"
+      ],
+      "problem": [
+        "Repeated refinement can turn validation into training and produce false confidence."
+      ],
+      "scope_in": [
+        "High priority; depends on tracked campaigns and deterministic simulation.",
+        "Version train/validation/final periods, warm-up handling, thresholds and access history.",
+        "Implement cost stress, neighboring-parameter checks, period stability and declared baselines.",
+        "Report inconclusive samples and comparison at consistent exposure.",
+        "Prioritize robustness across periods and controlled equity drawdown, then net return; thresholds and ranking mechanics follow the configurable engineering baseline in logics/discovery/mvp-development-contract.md.",
+        "Implement research policy v1 in logics/discovery/mvp-development-contract.md, including 60/20/20 splits, explicit heuristic eligibility, neighbor/cost stress and deterministic ranking excluding final holdout. Prerequisite: campaign ledger."
+      ],
+      "scope_out": [
+        "A guarantee of future returns, automatic acceptance based only on headline profit."
+      ],
+      "acceptance_criteria": [
+        "AC1: Final-holdout results do not feed search/ranking loops; inspection is logged and further tuning invalidates untouched status.",
+        "AC2: Temporal boundaries prevent future leakage while allowing explicitly causal indicator warm-up.",
+        "AC3: Reports contain net performance, equity drawdown, exposure, trades, costs and separate robustness verdicts.",
+        "AC4: Insufficient observations or unavailable stress inputs yield an explicit inconclusive result.",
+        "AC5: Candidate selection prioritizes robustness across periods and controlled equity drawdown before net return, using an explicit versioned policy with agreed thresholds; final-holdout results never participate in selection."
+      ]
+    },
+    {
+      "title": "Deliver campaign review and auditable research exports",
+      "priority": "Medium",
+      "complexity": "High",
+      "theme": "Research experience",
+      "request_acs": [
+        "AC6",
+        "AC7"
+      ],
+      "problem": [
+        "Users need to understand why a candidate succeeds or fails and reproduce the evidence."
+      ],
+      "scope_in": [
+        "Medium priority; depends on campaign and evaluation contracts; confirmed local browser UI in French on Windows.",
+        "Single-user local browser UI in French for campaign creation, progress/cancellation, dataset diagnostics, comparisons and trade inspection. Bind to loopback by default and initialize the project-owned source-language contract before adding interface copy.",
+        "Export assumptions, dataset/strategy/engine identifiers, periods, metrics, verdicts and limitations.",
+        "Record end-to-end reproduction, absence of order submission and measured throughput on declared hardware.",
+        "Compare individually evaluated strategies; the V1 interface must not imply shared-account portfolio performance.",
+        "Implement the eight-screen journey and JSON/CSV/HTML exports in logics/discovery/mvp-development-contract.md. Prerequisites: campaigns/evaluation; UI shell begins in slice 1. Full MVP closeout requires actual Windows/MT5 evidence."
+      ],
+      "scope_out": [
+        "Hosted authentication, subscriptions, production broker execution and profitability promises."
+      ],
+      "acceptance_criteria": [
+        "AC1: Through the agreed surface a user imports a fixture, runs a campaign, inspects a candidate and exports its research record.",
+        "AC2: Rejected and inconclusive results are visible and are not styled as verified winners.",
+        "AC3: A clean environment reproduces the reference campaign using documented commands and fixture inputs.",
+        "AC4: Validation demonstrates no order-submission path and reports measured run duration without extrapolated throughput claims.",
+        "AC5: Comparison reports retain individual-strategy assumptions and results without presenting combined shared-account portfolio metrics."
+      ]
+    }
+  ],
+  "orchestration_task": {
+    "title": "Orchestrate the major forex strategy research MVP",
+    "plan": [
+      "Wave 0: Implement the foundation and versioned contracts from logics/discovery/mvp-development-contract.md: locked backend/frontend setup, schemas, synthetic fixtures, French shell and absent-MT5 diagnostics. No operator setup is required to begin.",
+      "Wave 1: Implement data qualification and the deterministic M1 reference engine using hand-calculated and future-data fixtures. Build the isolated Windows adapter; record real-terminal verification as pending until setup exists.",
+      "Wave 2: Implement the 192-candidate template grid, persisted trial ledger, budgets, cancellation and interrupted-run recovery.",
+      "Wave 3: Implement versioned chronological screening, stress/neighborhood checks and final-holdout access audit.",
+      "Wave 4: Complete the French browser journey and exports; reproduce a synthetic campaign end to end, then verify installation and real MT5 history ingestion on Windows before full MVP closeout.",
+      "At each wave update affected docs and evidence; only close implementation slices after their acceptance criteria are proven. Preserve operator control over commits."
+    ]
+  },
+  "context_pack": {
+    "out": "logics/context-packs/forex-research-mvp.json",
+    "mode": "summary-only",
+    "profile": "normal"
+  }
+}

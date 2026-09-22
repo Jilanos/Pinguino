@@ -1,0 +1,455 @@
+{
+  "budgets": {
+    "max_docs": 24,
+    "max_docs_per_ref": 8
+  },
+  "changed_paths": [],
+  "command": "logics-manager sync context-pack req_000_establish_a_reproducible_major_forex_strategy_research_mvp task_001_orchestrate_the_major_forex_strategy_research_mvp adr_001_local_research_architecture_and_deterministic_mvp_contracts --mode full --profile deep",
+  "companion_docs": [],
+  "docs": [
+    {
+      "ai_context": {
+        "keywords": "establish, reproducible, major, forex, strategy, research, mvp",
+        "skip when": "Implementing live execution or expanding markets.",
+        "summary": "Implement the confirmed research scope using versioned engineering defaults; actual Windows/MT5 setup remains an integration gate.",
+        "use when": "Scoping historical generation and validation before any trading integration."
+      },
+      "kind": "request",
+      "linked_refs": {
+        "item": [
+          "item_001_settle_research_product_decisions_and_domain_contracts",
+          "item_002_ingest_and_qualify_historical_forex_datasets",
+          "item_003_implement_a_deterministic_causal_backtest_reference_engine",
+          "item_004_generate_bounded_strategies_and_track_research_campaigns",
+          "item_005_evaluate_chronological_robustness_and_protect_the_final_holdout",
+          "item_006_deliver_campaign_review_and_auditable_research_exports"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/request/req_000_establish_a_reproducible_major_forex_strategy_research_mvp.md",
+      "ref": "req_000_establish_a_reproducible_major_forex_strategy_research_mvp",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: A versioned product decision record distinguishes confirmed scope, provisional defaults and unresolved implementation choices; V1 has no order-submission or deployment capability.",
+          "- AC2: Historical datasets have immutable identity, source provenance, coverage, timezone/session metadata, broker contract and cost assumptions, plus an explicit quality report; invalid or insufficient data cannot silently pass.",
+          "- AC3: A deterministic causal reference backtest records orders, fills, trades, open-position equity and costs using a documented execution and sizing contract; future data cannot affect earlier decisions.",
+          "- AC4: Bounded strategy generation records family, parameters, seed, planned trials and completed/failed/cancelled attempts, and can reproduce an individual result.",
+          "- AC5: Chronological validation, a controlled final holdout, cost/parameter stress and inconclusive-sample verdicts produce explainable candidate assessments without using final evaluation to refine candidates.",
+          "- AC6: A single user can create a campaign, inspect data quality, compare candidates, drill into trades and export a reproducible report through the agreed interface."
+        ],
+        "Needs": [
+          "- Generate, backtest and refine diverse major-forex strategies with traceable evidence.",
+          "- Keep MT5 as the target market-data/execution ecosystem while limiting V1 to historical research.",
+          "- Separate confirmed scope from product decisions awaiting user feedback."
+        ]
+      },
+      "status": "Ready",
+      "title": "Establish a reproducible major forex strategy research MVP"
+    },
+    {
+      "ai_context": {
+        "keywords": "settle, research, product, decisions, domain, contracts",
+        "skip when": "Changing accepted scope without recording the decision.",
+        "summary": "Implement the portable foundation, explicit schemas and versioned MVP defaults.",
+        "use when": "Starting the first implementation slice without requiring Windows/MT5 setup."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_001_settle_research_product_decisions_and_domain_contracts"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_001_settle_research_product_decisions_and_domain_contracts.md",
+      "ref": "item_001_settle_research_product_decisions_and_domain_contracts",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: The decision register records user choices with rationale and explicitly leaves unanswered choices provisional.",
+          "- AC2: Validated schemas and fixtures encode the development contract, reject missing required inputs and distinguish synthetic defaults from broker metadata.",
+          "- AC3: Data flow explicitly excludes order requests, credentials in source control and terminal mutations.",
+          "- AC4: A clean environment installs locked dependencies and starts the local API/UI shell in synthetic mode without the MT5 package.",
+          "- AC5: Schema tests cover invalid policies, stable content identifiers and no credentials in exported configuration; French UI source-language validation passes."
+        ],
+        "Problem": [
+          "- There is no runnable application or domain schema. The foundation must turn the recorded contract into testable code without assuming an available MT5 installation."
+        ]
+      },
+      "status": "Ready",
+      "title": "Settle research product decisions and domain contracts"
+    },
+    {
+      "ai_context": {
+        "keywords": "ingest, qualify, historical, forex, datasets",
+        "skip when": "Submitting orders or silently substituting market history.",
+        "summary": "Qualify direct Windows MT5 history and broker metadata for three major pairs.",
+        "use when": "Implementing source ingestion and data-quality gates."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_002_ingest_and_qualify_historical_forex_datasets"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_002_ingest_and_qualify_historical_forex_datasets.md",
+      "ref": "item_002_ingest_and_qualify_historical_forex_datasets",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: Importing a fixture yields a stable dataset fingerprint and complete provenance/coverage report.",
+          "- AC2: Fixtures with bad ordering, duplicates, invalid OHLC or unknown timezone are rejected or quarantined with reasons.",
+          "- AC3: Missing execution/cost history and insufficient requested coverage cannot be represented as a fully qualified dataset.",
+          "- AC4: Contract metadata includes account-currency conversion inputs, volume constraints and trading sessions.",
+          "- AC5: Dataset qualification reports aligned H1/H4 signal and M1 execution coverage; missing M1 data cannot silently fall back to coarser execution."
+        ],
+        "Problem": [
+          "- Backtests cannot be trusted without provenance and consistent tradable history."
+        ]
+      },
+      "status": "Ready",
+      "title": "Ingest and qualify historical forex datasets"
+    },
+    {
+      "ai_context": {
+        "keywords": "implement, deterministic, causal, backtest, reference, engine",
+        "skip when": "Tuning performance ahead of correctness or executing real orders.",
+        "summary": "Prove causal fills, costs and open-position equity before increasing search volume.",
+        "use when": "Building or verifying reference simulation semantics."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_003_implement_a_deterministic_causal_backtest_reference_engine"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_003_implement_a_deterministic_causal_backtest_reference_engine.md",
+      "ref": "item_003_implement_a_deterministic_causal_backtest_reference_engine",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: Hand-calculated fixtures verify entry timing, spread/commission, stops/targets, gap handling and account-currency PnL.",
+          "- AC2: Changing future bars leaves earlier decisions and fills unchanged.",
+          "- AC3: Replaying identical inputs yields identical trades and metrics within a documented numerical tolerance.",
+          "- AC4: Equity drawdown includes unrealized PnL; approximations and insufficient inputs are visible.",
+          "- AC5: Fixtures demonstrate closed H1/H4 signal timing with M1 execution and documented conservative treatment of ambiguous bars; reports identify M1 simulation as an approximation rather than tick-level evidence."
+        ],
+        "Problem": [
+          "- A fast search amplifies incorrect fills and look-ahead before users can detect them."
+        ]
+      },
+      "status": "Ready",
+      "title": "Implement a deterministic causal backtest reference engine"
+    },
+    {
+      "ai_context": {
+        "keywords": "generate, bounded, strategies, track, research, campaigns",
+        "skip when": "Unrestricted generated code or automatic deployment.",
+        "summary": "Search three explainable families with bounded budgets and an auditable attempt ledger.",
+        "use when": "Implementing campaign generation, reproducibility and cancellation."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_004_generate_bounded_strategies_and_track_research_campaigns"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_004_generate_bounded_strategies_and_track_research_campaigns.md",
+      "ref": "item_004_generate_bounded_strategies_and_track_research_campaigns",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: A campaign records family/parameter bounds, seed, budget and planned trial count before running.",
+          "- AC2: Every attempt has an outcome and provenance; rejected or failed attempts remain visible.",
+          "- AC3: Cancellation stops scheduling new work and preserves completed results.",
+          "- AC4: A selected trial can be rerun independently from saved inputs."
+        ],
+        "Problem": [
+          "- Search needs explicit boundaries and full attempt history to avoid irreproducible selection."
+        ]
+      },
+      "status": "Ready",
+      "title": "Generate bounded strategies and track research campaigns"
+    },
+    {
+      "ai_context": {
+        "keywords": "evaluate, chronological, robustness, protect, final, holdout",
+        "skip when": "Claiming profitability from a single in-sample ranking.",
+        "summary": "Protect final evaluation from repeated selection and report robustness with uncertainty.",
+        "use when": "Implementing chronological windows, stress checks and holdout access history."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_005_evaluate_chronological_robustness_and_protect_the_final_holdout"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_005_evaluate_chronological_robustness_and_protect_the_final_holdout.md",
+      "ref": "item_005_evaluate_chronological_robustness_and_protect_the_final_holdout",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: Final-holdout results do not feed search/ranking loops; inspection is logged and further tuning invalidates untouched status.",
+          "- AC2: Temporal boundaries prevent future leakage while allowing explicitly causal indicator warm-up.",
+          "- AC3: Reports contain net performance, equity drawdown, exposure, trades, costs and separate robustness verdicts.",
+          "- AC4: Insufficient observations or unavailable stress inputs yield an explicit inconclusive result.",
+          "- AC5: Candidate selection prioritizes robustness across periods and controlled equity drawdown before net return, using an explicit versioned policy with agreed thresholds; final-holdout results never participate in selection."
+        ],
+        "Problem": [
+          "- Repeated refinement can turn validation into training and produce false confidence."
+        ]
+      },
+      "status": "Ready",
+      "title": "Evaluate chronological robustness and protect the final holdout"
+    },
+    {
+      "ai_context": {
+        "keywords": "deliver, campaign, review, auditable, research, exports",
+        "skip when": "Hosted accounts, subscriptions or broker execution.",
+        "summary": "Expose campaigns and evidence in a French local browser UI on Windows.",
+        "use when": "Delivering candidate comparison, trade inspection and reproducible reports."
+      },
+      "kind": "backlog",
+      "linked_refs": {
+        "item": [
+          "item_006_deliver_campaign_review_and_auditable_research_exports"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/backlog/item_006_deliver_campaign_review_and_auditable_research_exports.md",
+      "ref": "item_006_deliver_campaign_review_and_auditable_research_exports",
+      "schema_version": "1.0",
+      "sections": {
+        "Acceptance criteria": [
+          "- AC1: Through the agreed surface a user imports a fixture, runs a campaign, inspects a candidate and exports its research record.",
+          "- AC2: Rejected and inconclusive results are visible and are not styled as verified winners.",
+          "- AC3: A clean environment reproduces the reference campaign using documented commands and fixture inputs.",
+          "- AC4: Validation demonstrates no order-submission path and reports measured run duration without extrapolated throughput claims.",
+          "- AC5: Comparison reports retain individual-strategy assumptions and results without presenting combined shared-account portfolio metrics."
+        ],
+        "Problem": [
+          "- Users need to understand why a candidate succeeds or fails and reproduce the evidence."
+        ]
+      },
+      "status": "Ready",
+      "title": "Deliver campaign review and auditable research exports"
+    },
+    {
+      "ai_context": {},
+      "kind": "product",
+      "linked_refs": {
+        "adr": [
+          "adr_001_local_research_architecture_and_deterministic_mvp_contracts"
+        ],
+        "item": [
+          "item_001_settle_research_product_decisions_and_domain_contracts",
+          "item_002_ingest_and_qualify_historical_forex_datasets",
+          "item_003_implement_a_deterministic_causal_backtest_reference_engine",
+          "item_004_generate_bounded_strategies_and_track_research_campaigns",
+          "item_005_evaluate_chronological_robustness_and_protect_the_final_holdout",
+          "item_006_deliver_campaign_review_and_auditable_research_exports"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/product/prod_001_pinguino_major_forex_strategy_research_workbench.md",
+      "ref": "prod_001_pinguino_major_forex_strategy_research_workbench",
+      "schema_version": "1.0",
+      "sections": {},
+      "status": "Active",
+      "title": "Pinguino major forex strategy research workbench"
+    },
+    {
+      "ai_context": {
+        "keywords": "orchestrate, major, forex, strategy, research, mvp",
+        "skip when": "Treating scaffold completion as completed application delivery.",
+        "summary": "Sequence six research slices with data correctness before search and no order submission.",
+        "use when": "Starting implementation from the versioned MVP development contract."
+      },
+      "kind": "task",
+      "linked_refs": {
+        "item": [
+          "item_001_settle_research_product_decisions_and_domain_contracts",
+          "item_002_ingest_and_qualify_historical_forex_datasets",
+          "item_003_implement_a_deterministic_causal_backtest_reference_engine",
+          "item_004_generate_bounded_strategies_and_track_research_campaigns",
+          "item_005_evaluate_chronological_robustness_and_protect_the_final_holdout",
+          "item_006_deliver_campaign_review_and_auditable_research_exports"
+        ],
+        "prod": [
+          "prod_001_pinguino_major_forex_strategy_research_workbench"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/tasks/task_001_orchestrate_the_major_forex_strategy_research_mvp.md",
+      "ref": "task_001_orchestrate_the_major_forex_strategy_research_mvp",
+      "schema_version": "1.0",
+      "sections": {
+        "Context": [
+          "- Deliver the historical research MVP through six linked slices using the versioned engineering baseline in `logics/discovery/mvp-development-contract.md`. Corpus preparation is complete only as a planning artifact; application delivery has not started."
+        ],
+        "Validation": [
+          "- 2026-09-22 corpus readiness: lint --require-status passed; audit has no blocking findings (seven acceptance proofs deferred to implementation closeout); flow validate reports zero findings; health reports zero issue signals. Six implementation slices and a versioned development contract are ready. No application or Windows/MT5 integration tests have run."
+        ]
+      },
+      "status": "Ready",
+      "title": "Orchestrate the major forex strategy research MVP"
+    },
+    {
+      "ai_context": {},
+      "kind": "architecture",
+      "linked_refs": {
+        "adr": [
+          "adr_001_local_research_architecture_and_deterministic_mvp_contracts"
+        ],
+        "req": [
+          "req_000_establish_a_reproducible_major_forex_strategy_research_mvp"
+        ],
+        "task": [
+          "task_001_orchestrate_the_major_forex_strategy_research_mvp"
+        ]
+      },
+      "path": "logics/architecture/adr_001_local_research_architecture_and_deterministic_mvp_contracts.md",
+      "ref": "adr_001_local_research_architecture_and_deterministic_mvp_contracts",
+      "schema_version": "1.0",
+      "sections": {},
+      "status": "Accepted",
+      "title": "Local research architecture and deterministic MVP contracts"
+    }
+  ],
+  "estimates": {
+    "char_count": 16691,
+    "companion_doc_count": 0,
+    "doc_count": 10
+  },
+  "generated_at": "2026-09-22T15:07:56Z",
+  "handoff": {
+    "companion_doc_count": 0,
+    "enabled": false,
+    "source_refs": [
+      "req_000_establish_a_reproducible_major_forex_strategy_research_mvp",
+      "task_001_orchestrate_the_major_forex_strategy_research_mvp",
+      "adr_001_local_research_architecture_and_deterministic_mvp_contracts"
+    ],
+    "validation_summary_count": 0
+  },
+  "i18n": {
+    "actions": [
+      "Choose the source locale for app-owned user-facing copy.",
+      "Run logics-manager i18n init --source-locale <locale>.",
+      "Route new UI copy through stable semantic keys."
+    ],
+    "applicable": null,
+    "configured": false,
+    "contract_path": "logics/i18n/contract.json",
+    "findings": [],
+    "next_action": "Run logics-manager i18n init --source-locale <locale> for a project that owns user-facing copy.",
+    "ok": true,
+    "state": "absent"
+  },
+  "mode": "full",
+  "profile": "deep",
+  "ref": "req_000_establish_a_reproducible_major_forex_strategy_research_mvp,task_001_orchestrate_the_major_forex_strategy_research_mvp,adr_001_local_research_architecture_and_deterministic_mvp_contracts",
+  "refs": [
+    "req_000_establish_a_reproducible_major_forex_strategy_research_mvp",
+    "task_001_orchestrate_the_major_forex_strategy_research_mvp",
+    "adr_001_local_research_architecture_and_deterministic_mvp_contracts"
+  ],
+  "release": {
+    "blocking_reasons": [
+      "Missing logics/release/contract.json."
+    ],
+    "configured": false,
+    "contract_path": "logics/release/contract.json",
+    "guidance": [
+      "Release readiness must come from project-owned evidence, not conversational memory.",
+      "Use release status or validate before preparing or claiming release readiness.",
+      "Publication-oriented actions are explicit operator actions and are separate from safe read/validate actions."
+    ],
+    "next_action": "Run logics-manager release discover --write, then review and promote logics/release/contract.draft.json to logics/release/contract.json.",
+    "publication_actions": [
+      "GitHub release publication",
+      "external publication"
+    ],
+    "required_gates": [],
+    "safe_actions": [
+      "logics-manager release status",
+      "logics-manager release plan <version>",
+      "logics-manager release validate <version>"
+    ],
+    "state": "not_configured",
+    "target_id": null,
+    "target_version": null,
+    "targets": []
+  },
+  "validation_summary": []
+}
