@@ -2,12 +2,33 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from pinguino.domain.enums import DataProvenance, Symbol
 from pinguino.domain.identity import content_id
+
+
+class WeeklySession(BaseModel):
+    """Weekly trading window in UTC. Bars are only expected while the market is open."""
+
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    open_weekday: int = Field(ge=0, le=6, default=6)
+    open_hour_utc: int = Field(ge=0, le=23, default=21)
+    close_weekday: int = Field(ge=0, le=6, default=4)
+    close_hour_utc: int = Field(ge=0, le=23, default=21)
+
+    def is_open(self, moment: datetime) -> bool:
+        """True while the weekly session is running, using UTC weekday and hour."""
+        opened = (self.open_weekday, self.open_hour_utc)
+        closed = (self.close_weekday, self.close_hour_utc)
+        current = (moment.weekday(), moment.hour)
+        if opened > closed:
+            return current >= opened or current < closed
+        return opened <= current < closed
 
 
 class InstrumentContract(BaseModel):
@@ -33,6 +54,7 @@ class InstrumentContract(BaseModel):
     volume_step: Decimal = Field(gt=0)
     leverage: Decimal = Field(gt=0)
     stop_out_fraction: Decimal = Field(gt=0, le=1)
+    session: WeeklySession = WeeklySession()
     rollover_hour_utc: int = Field(ge=0, le=23)
     triple_swap_weekday: int = Field(ge=0, le=6)
 
