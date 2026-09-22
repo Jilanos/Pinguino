@@ -14,8 +14,10 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from pinguino import __version__
+from pinguino.api.preview import preview_campaign
 from pinguino.config import LOOPBACK_HOSTS, Settings, load_settings
 from pinguino.data.mt5_adapter import diagnose_source
+from pinguino.domain.campaign import CampaignConfig
 from pinguino.domain.errors import FRENCH_EXPLANATIONS, ErrorCode
 
 SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
@@ -56,6 +58,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @app.get("/api/health")
     async def health() -> dict[str, str]:
         return {"status": "ok", "version": __version__, "locale": resolved.source_locale}
+
+    @app.post("/api/campaigns/preview")
+    async def campaign_preview(config: CampaignConfig) -> dict[str, Any]:
+        preview, split = preview_campaign(config)
+        return {
+            "preview": preview.model_dump(mode="json"),
+            "validation_subwindows": [
+                window.model_dump(mode="json") for window in split.validation_subwindows
+            ],
+        }
 
     @app.get("/api/source/diagnostic")
     async def source_diagnostic() -> dict[str, Any]:
