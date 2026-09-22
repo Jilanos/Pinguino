@@ -1,0 +1,30 @@
+{
+  "app": {
+    "title": "Pinguino — atelier de recherche de stratégies",
+    "subtitle": "Recherche historique locale. Aucun ordre n'est transmis à un courtier."
+  },
+  "nav": {
+    "setup": "Configuration et source",
+    "datasets": "Jeux de données",
+    "campaign": "Campagne",
+    "results": "Résultats"
+  },
+  "source": {
+    "heading": "Diagnostic de la source MetaTrader 5",
+    "checking": "Vérification de la source en cours…",
+    "available": "Terminal MetaTrader 5 disponible : import d'historique possible.",
+    "syntheticOnly": "Mode synthétique uniquement : le terminal MetaTrader 5 n'est pas accessible.",
+    "unreachable": "Le service local est injoignable. Démarrez l'API puis rechargez la page."
+  },
+  "state": {
+    "empty": "Aucune donnée pour le moment.",
+    "rejected": "Jeu de données rejeté : qualité insuffisante.",
+    "cancelled": "Campagne annulée : les essais partiels sont exclus du classement.",
+    "interrupted": "Campagne interrompue : reprenez-la pour créer une campagne liée.",
+    "noCandidate": "Aucun candidat éligible. C'est un résultat de recherche valide."
+  },
+  "disclaimer": {
+    "synthetic": "Les résultats synthétiques sont illustratifs et non concluants.",
+    "noOrders": "Cet outil ne transmet aucun ordre et ne modifie aucun réglage du terminal."
+  }
+}

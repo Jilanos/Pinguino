@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "applicability": "applicable",
+  "source_locale": "fr",
+  "default_locale": "fr",
+  "fallback_locale": "fr",
+  "locales": [
+    "fr"
+  ],
+  "catalog": {
+    "path": "frontend/src/i18n/{locale}.json"
+  }
+}
