@@ -1,46 +1,72 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
-import { fetchSourceDiagnostic, type SourceDiagnostic } from './api'
-import { t } from './i18n'
+import { get, type Dataset } from './api'
+import { t, type MessageKey } from './i18n'
+import { CampaignPanel } from './panels/CampaignPanel'
+import { DatasetsPanel } from './panels/DatasetsPanel'
+import { ResultsPanel } from './panels/ResultsPanel'
+import { RunsPanel } from './panels/RunsPanel'
+import { SourcePanel } from './panels/SourcePanel'
 
-type Status =
-  | { kind: 'loading' }
-  | { kind: 'ready'; diagnostic: SourceDiagnostic }
-  | { kind: 'unreachable' }
+export { SourcePanel }
 
-export function SourcePanel(): JSX.Element {
-  const [status, setStatus] = useState<Status>({ kind: 'loading' })
-
-  useEffect(() => {
-    const controller = new AbortController()
-    fetchSourceDiagnostic(controller.signal)
-      .then((diagnostic) => setStatus({ kind: 'ready', diagnostic }))
-      .catch(() => setStatus({ kind: 'unreachable' }))
-    return () => controller.abort()
-  }, [])
-
-  return (
-    <section aria-labelledby="source-heading">
-      <h2 id="source-heading">{t('source.heading')}</h2>
-      {status.kind === 'loading' && <p>{t('source.checking')}</p>}
-      {status.kind === 'unreachable' && <p role="alert">{t('source.unreachable')}</p>}
-      {status.kind === 'ready' && (
-        <p>
-          {status.diagnostic.synthetic_mode_only
-            ? (status.diagnostic.message ?? t('source.syntheticOnly'))
-            : t('source.available')}
-        </p>
-      )}
-    </section>
-  )
-}
+type Tab = 'setup' | 'datasets' | 'campaign' | 'results'
+const TABS: Tab[] = ['setup', 'datasets', 'campaign', 'results']
 
 export function App(): JSX.Element {
+  const [tab, setTab] = useState<Tab>('setup')
+  const [datasets, setDatasets] = useState<Dataset[]>([])
+  const [campaignId, setCampaignId] = useState<string | null>(null)
+  const [opened, setOpened] = useState(0)
+
+  function openCampaign(id: string): void {
+    setCampaignId(id)
+    setOpened((value) => value + 1)
+  }
+
+  const loadDatasets = useCallback(() => {
+    get<Dataset[]>('/api/datasets')
+      .then((loaded) => setDatasets(Array.isArray(loaded) ? loaded : []))
+      .catch(() => setDatasets([]))
+  }, [])
+
+  useEffect(() => {
+    if (tab === 'datasets' || tab === 'campaign') loadDatasets()
+  }, [tab, loadDatasets])
+
   return (
     <main lang="fr">
       <h1>{t('app.title')}</h1>
       <p>{t('app.subtitle')}</p>
-      <SourcePanel />
+      <nav aria-label="Sections">
+        {TABS.map((value) => (
+          <button
+            key={value}
+            type="button"
+            aria-current={tab === value ? 'page' : undefined}
+            onClick={() => setTab(value)}
+          >
+            {t(`nav.${value}` as MessageKey)}
+          </button>
+        ))}
+      </nav>
+      {tab === 'setup' && <SourcePanel />}
+      {tab === 'datasets' && <DatasetsPanel datasets={datasets} onImported={loadDatasets} />}
+      {tab === 'campaign' && (
+        <CampaignPanel
+            datasets={datasets}
+            onStarted={(id) => {
+              openCampaign(id)
+              setTab('results')
+            }}
+          />
+      )}
+      {tab === 'results' && (
+        <>
+          <RunsPanel onOpen={openCampaign} />
+          <ResultsPanel key={`${campaignId ?? 'none'}-${opened}`} campaignId={campaignId} />
+        </>
+      )}
       <footer>
         <p>{t('disclaimer.noOrders')}</p>
       </footer>

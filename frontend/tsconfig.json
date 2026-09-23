@@ -24,6 +24,8 @@
     ]
   },
   "include": [
+    "e2e",
+    "playwright.config.ts",
     "src",
     "vite.config.ts"
   ]
