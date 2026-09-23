@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -35,8 +36,9 @@ def _config(max_candidates: int = 192, max_evaluations: int = 2000) -> CampaignC
 
 
 @pytest.fixture
-def client() -> TestClient:
-    return TestClient(create_app(Settings(request_token=TOKEN)), base_url="http://127.0.0.1:8787")
+def client(tmp_path: Path) -> TestClient:
+    settings = Settings(request_token=TOKEN, data_dir=tmp_path, ui_dir=None, worker_process=False)
+    return TestClient(create_app(settings), base_url="http://127.0.0.1:8787")
 
 
 class TestPreviewComputation:

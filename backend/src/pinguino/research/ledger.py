@@ -59,8 +59,11 @@ CREATE TABLE IF NOT EXISTS holdout_access (
 class Ledger:
     """Durable campaign state. One connection, one writer, one trial at a time."""
 
-    def __init__(self, database: Path | str) -> None:
-        self.connection = sqlite3.connect(database, isolation_level=None)
+    def __init__(self, database: Path | str, *, shared: bool = False) -> None:
+        # ``shared`` lets the API's worker threads read through one connection.
+        self.connection = sqlite3.connect(
+            database, isolation_level=None, check_same_thread=not shared, timeout=30
+        )
         self.connection.row_factory = sqlite3.Row
         self.connection.execute("PRAGMA journal_mode=WAL")
         self.connection.execute("PRAGMA foreign_keys=ON")

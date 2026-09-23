@@ -9,6 +9,12 @@ from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 LOOPBACK_HOSTS = frozenset({"127.0.0.1", "::1", "localhost"})
+REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+
+
+def _default_ui_dir() -> Path | None:
+    candidate = REPOSITORY_ROOT / "frontend" / "dist"
+    return candidate if (candidate / "index.html").is_file() else None
 
 
 class Settings(BaseSettings):
@@ -16,7 +22,9 @@ class Settings(BaseSettings):
 
     host: str = "127.0.0.1"
     port: int = Field(default=8787, ge=1024, le=65535)
-    data_dir: Path = Path("./data")
+    data_dir: Path = REPOSITORY_ROOT / "data"
+    ui_dir: Path | None = Field(default_factory=_default_ui_dir)
+    worker_process: bool = True
     source_locale: str = "fr"
     request_token: str = Field(default_factory=lambda: secrets.token_urlsafe(32))
 

@@ -12,6 +12,7 @@ import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -71,9 +72,15 @@ def run_campaign(
     window_end: datetime,
     token: CancellationToken | None = None,
     clock: Callable[[], float] = time.monotonic,
-    on_result: Callable[[str, SimulationResult], None] | None = None,
+    on_result: Callable[[str, Any], None] | None = None,
+    evaluate: Callable[[StrategyDefinition, MarketData, Callable[[], bool]], Any] | None = None,
+    evaluations_per_trial: int = 1,
 ) -> CampaignOutcome:
-    """Run the planned order, one trial at a time, until a budget or cancellation stops it."""
+    """Run the planned order, one trial at a time, until a budget or cancellation stops it.
+
+    ``evaluate`` replaces the single simulation over ``[window_start, window_end)`` when a
+    trial covers several windows; ``evaluations_per_trial`` is then charged to the budget.
+    """
     cancellation = token or CancellationToken()
     campaign_id = ledger.create_campaign(config)
     trial_ids = ledger.enqueue(campaign_id, list(definitions))
@@ -86,7 +93,7 @@ def run_campaign(
     for trial_id, definition in zip(trial_ids, definitions, strict=True):
         if cancellation.cancelled:
             break
-        if evaluations >= budget.max_evaluations:
+        if evaluations + evaluations_per_trial > budget.max_evaluations:
             exhausted = "max_evaluations"
             break
         if clock() >= deadline:
@@ -94,20 +101,15 @@ def run_campaign(
             break
 
         ledger.transition(trial_id, TrialState.RUNNING)
-        evaluations += 1
+        evaluations += evaluations_per_trial
         try:
             data = market(definition)
-            result = simulate(
-                definition=definition,
-                signal_bars=data.signal_bars,
-                execution_bars=data.execution_bars,
-                contract=data.contract,
-                costs=config.cost_policy,
-                sizing=config.sizing_policy,
-                window_start=window_start,
-                window_end=window_end,
-                should_cancel=lambda: cancellation.cancelled,
-            )
+            if evaluate is not None:
+                result = evaluate(definition, data, lambda: cancellation.cancelled)
+            else:
+                result = _simulate_once(
+                    definition, data, config, window_start, window_end, cancellation
+                )
         except SimulationCancelled:
             ledger.transition(trial_id, TrialState.CANCELLED)
             continue
@@ -128,4 +130,25 @@ def run_campaign(
         not_run=counts.get(TrialState.QUEUED, 0),
         evaluations_used=evaluations,
         budget_exhausted=exhausted,
+    )
+
+
+def _simulate_once(
+    definition: StrategyDefinition,
+    data: MarketData,
+    config: CampaignConfig,
+    window_start: datetime,
+    window_end: datetime,
+    cancellation: CancellationToken,
+) -> SimulationResult:
+    return simulate(
+        definition=definition,
+        signal_bars=data.signal_bars,
+        execution_bars=data.execution_bars,
+        contract=data.contract,
+        costs=config.cost_policy,
+        sizing=config.sizing_policy,
+        window_start=window_start,
+        window_end=window_end,
+        should_cancel=lambda: cancellation.cancelled,
     )

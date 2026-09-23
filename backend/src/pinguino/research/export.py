@@ -48,6 +48,10 @@ FRENCH_FLAG_LABELS: dict[ApproximationFlag, str] = {
     ApproximationFlag.STOP_TARGET_AMBIGUITY: (
         "Des bougies atteignaient à la fois le stop et l'objectif : le stop a été retenu."
     ),
+    ApproximationFlag.DELAYED_ENTRY: (
+        "Certaines entrées ont eu lieu à la première minute M1 disponible après une minute"
+        " absente de l'historique."
+    ),
 }
 
 

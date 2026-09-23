@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -11,8 +14,8 @@ TOKEN = "test-token"
 
 
 @pytest.fixture
-def client() -> TestClient:
-    settings = Settings(request_token=TOKEN)
+def client(tmp_path: Path) -> TestClient:
+    settings = Settings(request_token=TOKEN, data_dir=tmp_path, ui_dir=None, worker_process=False)
     return TestClient(create_app(settings), base_url="http://127.0.0.1:8787")
 
 
@@ -23,8 +26,10 @@ class TestLocalGuards:
         assert response.json()["status"] == "ok"
 
     def test_source_diagnostic_reports_synthetic_mode_instead_of_failing(
-        self, client: TestClient
+        self, client: TestClient, monkeypatch: pytest.MonkeyPatch
     ) -> None:
+        # A None entry makes the import fail even where the package is installed.
+        monkeypatch.setitem(sys.modules, "MetaTrader5", None)
         payload = client.get("/api/source/diagnostic").json()
         assert payload["package_available"] is False
         assert payload["synthetic_mode_only"] is True
