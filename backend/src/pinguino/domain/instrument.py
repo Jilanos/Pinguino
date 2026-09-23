@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -29,6 +29,20 @@ class WeeklySession(BaseModel):
         if opened > closed:
             return current >= opened or current < closed
         return opened <= current < closed
+
+    def is_open_throughout(self, start: datetime, end: datetime) -> bool:
+        """True when no session closure falls within ``[start, end]``.
+
+        Sessions change on the hour, so checking each hour mark in the span is exact.
+        """
+        if not self.is_open(start) or not self.is_open(end):
+            return False
+        mark = start.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+        while mark < end:
+            if not self.is_open(mark):
+                return False
+            mark += timedelta(hours=1)
+        return True
 
 
 class InstrumentContract(BaseModel):

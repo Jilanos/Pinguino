@@ -183,6 +183,14 @@ def simulate(
     }
 
     window_bars = [bar for bar in execution_bars if window_start <= bar.open_time < window_end]
+    # Signals closing before the window belong to its warm-up and never trade.
+    pending = sorted(
+        (close, signal)
+        for close, signal in signals_by_close.items()
+        if window_start <= close < window_end
+    )
+    pending_index = 0
+    delayed_entries = 0
     position: _Position | None = None
     pending_stop_out = False
 
@@ -212,14 +220,26 @@ def simulate(
         if position is not None:
             position = _open_price_exits(position, bar, market, book, time_exit_deadline)
 
-        signal = signals_by_close.get(bar.open_time)
-        if signal is not None:
+        # Entry is the first M1 open at or after the signal close within the same
+        # session; a missing close minute delays it, a session closure cancels it.
+        while pending_index < len(pending) and pending[pending_index][0] <= bar.open_time:
+            close, signal = pending[pending_index]
+            pending_index += 1
+            if close != bar.open_time and not contract.session.is_open_throughout(
+                close, bar.open_time
+            ):
+                book.rejected.append(
+                    RejectedSignal(at=close, reason="no tradable M1 bar in the declared session")
+                )
+                continue
             if position is not None:
                 book.rejected.append(
                     RejectedSignal(at=bar.open_time, reason="a position is already open")
                 )
-            else:
-                position = _open_position(signal, bar, market, book, sizing, definition)
+                continue
+            position = _open_position(signal, bar, market, book, sizing, definition)
+            if position is not None and close != bar.open_time:
+                delayed_entries += 1
 
         if position is not None:
             position = _intrabar_exits(position, bar, market, book)
@@ -252,6 +272,8 @@ def simulate(
     ]
     if book.ambiguity_count:
         flags.append(ApproximationFlag.STOP_TARGET_AMBIGUITY)
+    if delayed_entries:
+        flags.append(ApproximationFlag.DELAYED_ENTRY)
 
     return SimulationResult(
         fills=tuple(book.fills),

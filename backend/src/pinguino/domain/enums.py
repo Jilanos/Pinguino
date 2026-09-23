@@ -75,3 +75,4 @@ class ApproximationFlag(StrEnum):
     BAR_LEVEL_DRAWDOWN = "bar_level_drawdown"
     APPROXIMATE_MARGIN_MODEL = "approximate_margin_model"
     STOP_TARGET_AMBIGUITY = "stop_target_ambiguity"
+    DELAYED_ENTRY = "delayed_entry"

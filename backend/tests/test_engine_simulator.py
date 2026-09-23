@@ -119,6 +119,40 @@ class TestEntry:
         result = _run([_flat(0), _flat(1)])
         assert result.fills == ()
 
+    def test_a_missing_close_minute_delays_the_entry_to_the_next_m1_open(self) -> None:
+        result = _run([_flat(59), _flat(62), _flat(63)])
+        assert result.fills[0].executed_at == START + timedelta(minutes=62)
+        assert ApproximationFlag.DELAYED_ENTRY in result.approximation_flags
+
+    def test_an_entry_never_waits_across_a_session_closure(self) -> None:
+        # Friday 20:00 bar closes at 21:00 UTC, when the fixture session closes.
+        friday = START + timedelta(days=4, hours=20)
+        bars = [
+            Bar(
+                open_time=friday + timedelta(hours=index),
+                open=Decimal("1.10000"),
+                high=Decimal("1.10050"),
+                low=Decimal("1.09950"),
+                close=Decimal("1.10000"),
+                spread_points=SPREAD_POINTS,
+            )
+            for index in range(1)
+        ]
+        monday = [_flat(offset) for offset in (7 * 24 * 60, 7 * 24 * 60 + 1)]
+        result = simulate(
+            definition=_definition(),
+            signal_bars=bars,
+            execution_bars=[_flat(4 * 24 * 60 + 20 * 60 + 59), *monday],
+            contract=EURUSD,
+            costs=fixture_cost_policy(),
+            sizing=fixture_sizing_policy(),
+            window_start=friday,
+            window_end=START + timedelta(days=8),
+            signals=[Signal(bar_index=0, direction=Direction.LONG, atr=ATR)],
+        )
+        assert result.fills == ()
+        assert ApproximationFlag.DELAYED_ENTRY not in result.approximation_flags
+
     def test_a_second_signal_is_ignored_while_positioned(self) -> None:
         bars = [_flat(offset) for offset in range(60, 125)]
         result = simulate(

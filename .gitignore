@@ -26,5 +26,13 @@ node_modules/
 dist/
 
 # Local research data (immutable bar files, SQLite, exports)
-data/
-backend/data/
+/data/
+/backend/data/
+
+# Playwright artefacts
+frontend/test-results/
+frontend/playwright-report/
+frontend/.e2e-data/
+
+# Local validation logs
+reports/windows-validation/

@@ -91,12 +91,13 @@ class TestIngestion:
         assert series.findings == ()
         assert series.quarantined == ()
 
-    def test_open_session_gap_is_quarantined_with_its_range(self) -> None:
+    def test_only_the_missing_span_of_an_open_session_gap_is_quarantined(self) -> None:
         series = _ingest(with_gap(_h1_series(24), drop_from=5, drop_count=3), Timeframe.H1)
         assert len(series.quarantined) == 1
         start, end = series.quarantined[0]
-        assert end - start == timedelta(hours=4)
-        assert len(series.usable_bars) < len(series.bars)
+        assert (start, end) == (START + timedelta(hours=5), START + timedelta(hours=8))
+        # The bars on either side of the hole stay usable.
+        assert len(series.usable_bars) == len(series.bars) == 21
 
 
 class TestQualification:
@@ -133,10 +134,40 @@ class TestQualification:
         assert manifest.status is DatasetStatus.APPROXIMATE
         assert FindingCode.MISSING_COST_COMPONENT in {f.code for f in findings}
 
-    def test_missing_m1_history_rejects_instead_of_falling_back(self) -> None:
+    def test_m1_history_that_executes_no_signal_rejects_instead_of_falling_back(self) -> None:
         manifest, findings = self._qualify(m1_count=60)
         assert manifest.status is DatasetStatus.REJECTED
         assert FindingCode.MISSING_EXECUTION_COVERAGE in {f.code for f in findings}
+
+    def test_partial_m1_history_keeps_the_covered_span_usable(self) -> None:
+        manifest, findings = self._qualify(m1_count=12 * 60 + 1)
+        assert manifest.status is DatasetStatus.APPROXIMATE
+        missing = [f for f in findings if f.code is FindingCode.MISSING_EXECUTION_COVERAGE]
+        # One range finding for every close after the M1 history, not one per bar.
+        assert len(missing) == 1
+        assert missing[0].range_start == START + timedelta(hours=13)
+        assert manifest.coverage.execution_end == START + timedelta(hours=12)
+
+    def test_a_missing_close_minute_delays_execution_without_rejecting(self) -> None:
+        execution = with_gap(_m1_series(24 * 60 + 1), drop_from=5 * 60, drop_count=2)
+        manifest, findings = qualify_dataset(
+            signal_series=_ingest(_h1_series(24), Timeframe.H1),
+            execution_series=_ingest(execution, Timeframe.M1),
+            contract=CONTRACT,
+            provenance=DataProvenance.SYNTHETIC_FIXTURE,
+            requested_start=START,
+            requested_end=START + timedelta(hours=23),
+            costs_sourced=True,
+            source_note="synthetic ramp fixture",
+            imported_at=START,
+        )
+        assert manifest.status is DatasetStatus.APPROXIMATE
+        delayed = [f for f in findings if f.code is FindingCode.DELAYED_EXECUTION]
+        assert [f.at for f in delayed] == [START + timedelta(hours=5)]
+        assert FindingCode.MISSING_EXECUTION_COVERAGE not in {f.code for f in findings}
+        assert manifest.coverage.quarantined_ranges == (
+            (START + timedelta(hours=5), START + timedelta(hours=5, minutes=2)),
+        )
 
     def test_coverage_shortfall_is_reported(self) -> None:
         manifest, findings = qualify_dataset(

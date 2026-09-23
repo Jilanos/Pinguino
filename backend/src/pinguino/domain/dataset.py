@@ -48,6 +48,9 @@ class CoverageReport(BaseModel):
     bar_count: int = Field(ge=0)
     quarantined_ranges: tuple[tuple[datetime, datetime], ...] = ()
     rejected_bar_count: int = Field(ge=0, default=0)
+    #: M1 execution history actually available; signals outside it cannot trade.
+    execution_start: datetime | None = None
+    execution_end: datetime | None = None
 
     _utc = field_validator("requested_start", "requested_end", "actual_start", "actual_end")(
         require_utc

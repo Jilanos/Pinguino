@@ -16,6 +16,16 @@ class ErrorCode(StrEnum):
     MISSING_COST_COMPONENT = "MISSING_COST_COMPONENT"
     MT5_PACKAGE_UNAVAILABLE = "MT5_PACKAGE_UNAVAILABLE"
     MT5_TERMINAL_UNAVAILABLE = "MT5_TERMINAL_UNAVAILABLE"
+    MT5_TERMINAL_DISCONNECTED = "MT5_TERMINAL_DISCONNECTED"
+    MT5_SYMBOL_UNAVAILABLE = "MT5_SYMBOL_UNAVAILABLE"
+    MT5_HISTORY_UNAVAILABLE = "MT5_HISTORY_UNAVAILABLE"
+    DATASET_NOT_FOUND = "DATASET_NOT_FOUND"
+    DATASET_REJECTED = "DATASET_REJECTED"
+    DATASET_COVERAGE_INSUFFICIENT = "DATASET_COVERAGE_INSUFFICIENT"
+    CAMPAIGN_NOT_FOUND = "CAMPAIGN_NOT_FOUND"
+    CAMPAIGN_ALREADY_RUNNING = "CAMPAIGN_ALREADY_RUNNING"
+    CANDIDATE_NOT_FOUND = "CANDIDATE_NOT_FOUND"
+    PREVIEW_REQUIRED = "PREVIEW_REQUIRED"
     CAMPAIGN_IMMUTABLE = "CAMPAIGN_IMMUTABLE"
     HOLDOUT_ACCESS_DENIED = "HOLDOUT_ACCESS_DENIED"
     REQUEST_TOKEN_INVALID = "REQUEST_TOKEN_INVALID"
@@ -39,6 +49,32 @@ FRENCH_EXPLANATIONS: dict[ErrorCode, str] = {
     ErrorCode.MT5_TERMINAL_UNAVAILABLE: (
         "Le terminal MetaTrader 5 n'est pas accessible : le mode synthétique reste utilisable."
     ),
+    ErrorCode.MT5_TERMINAL_DISCONNECTED: (
+        "Le terminal MetaTrader 5 est lancé mais n'est connecté à aucun serveur :"
+        " connectez manuellement votre compte de démonstration."
+    ),
+    ErrorCode.MT5_SYMBOL_UNAVAILABLE: (
+        "Ce symbole n'est pas disponible dans le terminal : ajoutez-le manuellement à la"
+        " fenêtre Market Watch."
+    ),
+    ErrorCode.MT5_HISTORY_UNAVAILABLE: (
+        "L'historique demandé n'a pas pu être lu depuis le terminal MetaTrader 5."
+    ),
+    ErrorCode.DATASET_NOT_FOUND: "Jeu de données introuvable.",
+    ErrorCode.DATASET_REJECTED: (
+        "Ce jeu de données est rejeté par le contrôle qualité : il ne peut pas servir à une"
+        " campagne."
+    ),
+    ErrorCode.DATASET_COVERAGE_INSUFFICIENT: (
+        "La couverture du jeu de données ne couvre pas la période demandée, préchauffage"
+        " compris : choisissez une période plus courte."
+    ),
+    ErrorCode.CAMPAIGN_NOT_FOUND: "Campagne introuvable.",
+    ErrorCode.CAMPAIGN_ALREADY_RUNNING: (
+        "Une campagne est déjà en cours : une seule campagne s'exécute à la fois."
+    ),
+    ErrorCode.CANDIDATE_NOT_FOUND: "Candidat introuvable dans cette campagne.",
+    ErrorCode.PREVIEW_REQUIRED: ("Prévisualisez cette configuration avant de lancer la campagne."),
     ErrorCode.CAMPAIGN_IMMUTABLE: (
         "La configuration ne peut plus être modifiée après la création de la campagne."
     ),
