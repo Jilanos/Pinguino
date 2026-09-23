@@ -1,14 +1,14 @@
 ## item_001_settle_research_product_decisions_and_domain_contracts - Settle research product decisions and domain contracts
 > From version: 1.0.0
 > Schema version: 1.0
-> Status: In progress
+> Status: Done
 > Understanding: 90%
 > Confidence: 85%
-> Progress: 85%
+> Progress: 100%
 > Complexity: Medium
 > Theme: Product discovery
 > Reminder: Update status/understanding/confidence/progress and linked request/task references when you edit this doc.
-> Indicators reviewed: 2026-09-22 17:11:43
+> Indicators reviewed: 2026-09-23 13:14:19
 
 # AI Context
 - Summary: Implement the portable foundation, explicit schemas and versioned MVP defaults.
@@ -52,3 +52,9 @@
 # Priority
 - Priority: High
 - Rationale: All implementation slices depend on explicit product, data and experiment contracts.
+
+# Tasks
+- `task_001_orchestrate_the_major_forex_strategy_research_mvp`
+
+# Notes
+- Task `task_001_orchestrate_the_major_forex_strategy_research_mvp` was finished via `logics-manager flow finish task` on 2026-09-23.

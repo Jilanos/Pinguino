@@ -1,11 +1,12 @@
 ## prod_001_pinguino_major_forex_strategy_research_workbench - Pinguino major forex strategy research workbench
 > Date: 2026-09-22
-> Status: Active
+> Status: Settled
 > Related request: `req_000_establish_a_reproducible_major_forex_strategy_research_mvp`
-> Related backlog: `item_001_settle_research_product_decisions_and_domain_contracts`, `item_002_ingest_and_qualify_historical_forex_datasets`, `item_003_implement_a_deterministic_causal_backtest_reference_engine`, `item_004_generate_bounded_strategies_and_track_research_campaigns`, `item_005_evaluate_chronological_robustness_and_protect_the_final_holdout`, `item_006_deliver_campaign_review_and_auditable_research_exports`
+> Related backlog: `item_001_settle_research_product_decisions_and_domain_contracts`
 > Related task: `task_001_orchestrate_the_major_forex_strategy_research_mvp`
 > Related architecture: adr_001_local_research_architecture_and_deterministic_mvp_contracts
 > Reminder: Update status, linked refs, scope, decisions, success signals, and open questions when you edit this doc.
+> Indicators reviewed: 2026-09-23 13:14:19
 
 # Overview
 A local French browser workbench running on Windows, reading MT5 history directly, to generate and backtest explainable trend, mean-reversion and breakout strategies on EURUSD/GBPUSD/USDJPY H1/H4. Target five years where available. Historical research only. Prioritize robustness across periods and controlled equity drawdown, then net return; thresholds and ranking mechanics use configurable engineering defaults in the development contract. Confirmed simulation: H1/H4 signals, M1 execution with conservative ambiguity handling, and individual-strategy evaluation/comparison.
@@ -55,5 +56,5 @@ flowchart LR
 ```
 
 # References
-- Product back-reference: `req_000_establish_a_reproducible_major_forex_strategy_research_mvp`
+- Product back-reference: `item_001_settle_research_product_decisions_and_domain_contracts`
 - Task back-reference: `task_001_orchestrate_the_major_forex_strategy_research_mvp`

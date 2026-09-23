@@ -1,13 +1,13 @@
 ## req_000_establish_a_reproducible_major_forex_strategy_research_mvp - Establish a reproducible major forex strategy research MVP
 > From version: 1.0.0
 > Schema version: 1.0
-> Status: Ready
+> Status: Done
 > Understanding: 90%
 > Confidence: 85%
 > Complexity: High
 > Theme: Strategy research
 > Reminder: Update status/understanding/confidence and linked backlog/task references when you edit this doc.
-> Indicators reviewed: 2026-09-22 17:07:55
+> Indicators reviewed: 2026-09-23 13:14:18
 
 # AI Context
 - Summary: Implement the confirmed research scope using versioned engineering defaults; actual Windows/MT5 setup remains an integration gate.
